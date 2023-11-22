@@ -22,6 +22,7 @@ public class ObjetosInteractivos {
         
     }
     // GUARDAMOS LA INFORMACION DEL USUARIO
+      
     public String usuario;
     public String contra;
     ArrayList<String> tablas = new ArrayList<String> ();

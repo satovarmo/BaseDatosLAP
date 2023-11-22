@@ -17,7 +17,8 @@ public class conectar {
                 con = (Connection) DriverManager.getConnection(URL, user, pass);
             }catch(ClassNotFoundException | SQLException e){
                 
-            } 
+            }  
+            
             return con;
         }
 }

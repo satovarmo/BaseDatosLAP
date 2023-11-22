@@ -168,6 +168,7 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
             
         }
         
+        
         else if(e.getSource()==motint.obj.BotonEliminarFila){
             if(motint.obj.TablaVisual.getSelectedRow()>=0){
                 Object[] col=new Object[motint.obj.TablaVisual.getColumnCount()];

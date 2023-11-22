@@ -153,6 +153,7 @@ public class MotorInterfaz {
         obj.TipoUsuario.setVisible(true);
         obj.PanelIngreso.add(obj.TipoUsuario);
         
+        
         obj.TextContraseña.setBounds(300,300,200,50);
         obj.TextContraseña.setText("Ingresa tu contraseña");
         obj.TextContraseña.setEditable(true);
