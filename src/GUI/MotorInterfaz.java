@@ -197,8 +197,6 @@ public class MotorInterfaz {
         obj.BoxTabla.removeAllItems();
         obj.BoxTabla.removeActionListener(evt);
         obj.BoxTabla.addActionListener(evt);
-        obj.BoxTabla.removeMouseListener(evt);
-        obj.BoxTabla.addMouseListener(evt);
         obj.BoxTabla.addItem("");
         for(int i=0;i<obj.tablas.size();i++){
             obj.BoxTabla.addItem(obj.tablas.get(i));

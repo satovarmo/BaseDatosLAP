@@ -95,7 +95,12 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
         
         
         else if(e.getSource()==motint.obj.BotonVisualizar){
-            
+            if(motint.obj.TablaVisual.getSelectedRow()>=0){
+                String text=motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), motint.obj.TablaVisual.getSelectedColumn()).toString();
+                JOptionPane.showMessageDialog(null,text);
+            }else{
+                JOptionPane.showMessageDialog(null,"No has seleccionado ninguna fila para ver");
+            }
         }
         
         else if(e.getSource()==motint.obj.BotonEliminar){
@@ -313,15 +318,9 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(e.getSource()==motint.obj.BoxTabla  &&  e.getClickCount()==2){
-            if(motint.obj.TablaVisual.getSelectedRow()>=0){
-                String text=motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), motint.obj.TablaVisual.getSelectedColumn()).toString();
-                JOptionPane.showMessageDialog(null,text);
-            }else{
-                JOptionPane.showMessageDialog(null,"No has seleccionado ninguna fila para ver");
-            }
-        }
+        
     }
+    
 
     @Override
     public void mousePressed(MouseEvent e) {
