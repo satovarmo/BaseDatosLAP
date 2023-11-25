@@ -7,34 +7,25 @@ import LAP.conectar;
 
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Vector;
-import javax.swing.AbstractCellEditor;
-import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-
 
 
 public class MotorInterfaz {
@@ -46,17 +37,29 @@ public class MotorInterfaz {
     
     
     public static void main(String args[]){
-        MotorInterfaz mi=new MotorInterfaz();
+        try {
+        for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
+                UIManager.setLookAndFeel(info.getClassName());
+                break;
+            }
+        }
+    } catch (Exception e) {
+        // Si Nimbus no está disponible, puedes configurar la GUI con otro aspecto y sensación.
+    }
+         MotorInterfaz mi=new MotorInterfaz();
     }
 
-    public MotorInterfaz(){
-        PrimeraPantallaIngreso();
+    public MotorInterfaz(){PrimeraPantallaIngreso();
         CreacionVentana();
+        
     }
     
     public JScrollPane scrollPane = new JScrollPane (obj.TablaVisual);;
     // CREAMOS LA VENTANA 
     public void CreacionVentana(){
+        obj.ventana.setDefaultLookAndFeelDecorated(true);
+        obj.ventana.setIconImage(obj.logo.getImage());
         obj.ventana.setSize(800, 600);
         obj.ventana.setDefaultCloseOperation(EXIT_ON_CLOSE);
         obj.ventana.getContentPane().setBackground(null);
@@ -69,7 +72,7 @@ public class MotorInterfaz {
     
     
     // FUNCIÓN QUE HABILITA LOS BOTONES BASADO EN LOS PERMISOS D QUIEN INGRESA
-    public void HabilitarBotones(String a){
+  public void HabilitarBotones(String a){
         obj.BotonInsertar.setEnabled(false);
         obj.BotonEliminar.setEnabled(false);
         obj.BotonActualizar.setEnabled(false);
@@ -100,7 +103,7 @@ public class MotorInterfaz {
                 obj.BotonVisualizar.setEnabled(true);
             } 
             if(permisos.indexOf("INSERT")>=0){
-                obj.BotonInsertar.setEnabled(true);
+                obj.BotonInsertar.setEnabled(true);       
             } 
             if(permisos.indexOf("UPDATE")>=0){
                 obj.BotonActualizar.setEnabled(true);
@@ -119,27 +122,34 @@ public class MotorInterfaz {
         obj.PanelIngreso.removeAll();
         obj.PanelIngreso.setBounds(0,0,800,600);
         obj.PanelIngreso.setLayout(null);
-        obj.PanelIngreso.setBackground(new Color(217,235,255));
+        obj.PanelIngreso.setBackground(new Color(173,216,230));
         obj.ventana.add(obj.PanelIngreso);
         
+        
+        obj.Títulobd.setBounds(240,10,320,200);
+        obj.Títulobd.setBorder(null);
+        obj.Títulobd.setBackground(null);
+        obj.Títulobd.setVisible(true);
+        obj.AjustarImg("/Imagenes/LogotipoSinFondo.png", obj.Títulobd);
         obj.PanelIngreso.add(obj.Títulobd);
+
         
         JLabel TextoEnt=new JLabel();
-        TextoEnt.setBounds(185,120,430,30);
-        TextoEnt.setFont(new Font("arial",0,23));
-        TextoEnt.setText("Ingresa tu tipo de usuario y contraseña");
+        TextoEnt.setBounds(225,210,350,20);
+        TextoEnt.setFont(new Font("arial",1,20));
+        TextoEnt.setText("BIENVENIDO A LA BASE DE DATOS");
         TextoEnt.setBorder(null);
         TextoEnt.setBackground(null);
-        TextoEnt.setForeground(new Color(0,0,0));
+        TextoEnt.setForeground(new Color(31,73,155));
         TextoEnt.setVisible(true);
         obj.PanelIngreso.add(TextoEnt);
         
-        obj.TipoUsuario.setBounds(300,200,200,50);
-        obj.TipoUsuario.setFont(new Font("arial",0,20));
+        obj.TipoUsuario.setBounds(300,270,200,50);
+        obj.TipoUsuario.setFont(new Font("arial",2,15));
         obj.TipoUsuario.setBorder(null);
-        obj.TipoUsuario.setForeground(new Color(39, 40, 80));
+        obj.TipoUsuario.setForeground(Color.RED);
         obj.TipoUsuario.removeAllItems();
-        obj.TipoUsuario.addItem("");
+        obj.TipoUsuario.addItem("Elige tu usuario");
         obj.TipoUsuario.addItem("administrador");
         obj.TipoUsuario.addItem("vendedor");
         obj.TipoUsuario.addItem("acudiente");
@@ -154,7 +164,7 @@ public class MotorInterfaz {
         obj.PanelIngreso.add(obj.TipoUsuario);
         
         
-        obj.TextContraseña.setBounds(300,300,200,50);
+        obj.TextContraseña.setBounds(300,350,200,50);
         obj.TextContraseña.setText("Ingresa tu contraseña");
         obj.TextContraseña.setEditable(true);
         obj.TextContraseña.setFont(new Font("arial",0,12));
@@ -167,10 +177,10 @@ public class MotorInterfaz {
         obj.PanelIngreso.add(obj.TextContraseña);
         
                  
-        obj.BotonAceptar.setFont(new Font("arial",3,30));
-        obj.BotonAceptar.setBackground(new Color(27,180,233));
-        obj.BotonAceptar.setBounds(225,370,350,50);
-        obj.BotonAceptar.setForeground(new Color(0,0,0));
+        obj.BotonAceptar.setFont(new Font("arial",3,23));
+        obj.BotonAceptar.setBackground(new Color(0,0,255));
+        obj.BotonAceptar.setBounds(225,420,350,50);
+        obj.BotonAceptar.setForeground(Color.WHITE);
         obj.BotonAceptar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         obj.BotonAceptar.setFocusPainted(false);
         obj.BotonAceptar.removeActionListener(evt);
@@ -188,6 +198,10 @@ public class MotorInterfaz {
         int x=obj.ventana.getWidth();
         int y=obj.ventana.getHeight();
         obj.PanelIngreso.setBounds(0,0,x/3,y);
+        obj.PanelTabla.setBounds(x/3,0,2*x/3,y);
+        obj.PanelTabla.setLayout(null);
+        obj.PanelTabla.setBackground(Color.gray);
+        obj.ventana.add(obj.PanelTabla);
         
         
         obj.BoxTabla.setBounds(obj.ventana.getWidth()/6-x/12,50,x/6,50);
@@ -208,8 +222,8 @@ public class MotorInterfaz {
         obj.BotonVisualizar.setBounds(obj.ventana.getWidth()/6-x/12,150,x/6,50);
         obj.BotonVisualizar.setEnabled(false);
         obj.BotonVisualizar.setFont(new Font("arial",3,18));
-        obj.BotonVisualizar.setBackground(new Color(27,180,233));
-        obj.BotonVisualizar.setForeground(new Color(0,0,0));
+        obj.BotonVisualizar.setBackground(new Color(0,0,255));
+        obj.BotonVisualizar.setForeground(Color.WHITE);
         obj.BotonVisualizar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         obj.BotonVisualizar.setFocusPainted(false);
         obj.BotonVisualizar.removeActionListener(evt);
@@ -218,9 +232,9 @@ public class MotorInterfaz {
         
         obj.BotonEliminar.setBounds(obj.ventana.getWidth()/6-x/12,250,x/6,50);
         obj.BotonEliminar.setEnabled(false);
-        obj.BotonEliminar.setFont(new Font("arial",3,30));
-        obj.BotonEliminar.setBackground(new Color(27,180,233));
-        obj.BotonEliminar.setForeground(new Color(0,0,0));
+        obj.BotonEliminar.setFont(new Font("arial",3,23));
+        obj.BotonEliminar.setBackground(new Color(0,0,255));
+        obj.BotonEliminar.setForeground(Color.WHITE);
         obj.BotonEliminar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         obj.BotonEliminar.setFocusPainted(false);
         obj.BotonEliminar.removeActionListener(evt);
@@ -229,9 +243,9 @@ public class MotorInterfaz {
         
         obj.BotonActualizar.setBounds(obj.ventana.getWidth()/6-x/12,350,x/6,50);
         obj.BotonActualizar.setEnabled(false);
-        obj.BotonActualizar.setFont(new Font("arial",3,30));
-        obj.BotonActualizar.setBackground(new Color(27,180,233));
-        obj.BotonActualizar.setForeground(new Color(0,0,0));
+        obj.BotonActualizar.setFont(new Font("arial",3,23));
+        obj.BotonActualizar.setBackground(new Color(0,0,255));
+        obj.BotonActualizar.setForeground(Color.WHITE);
         obj.BotonActualizar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         obj.BotonActualizar.setFocusPainted(false);
         obj.BotonActualizar.removeActionListener(evt);
@@ -240,9 +254,9 @@ public class MotorInterfaz {
         
         obj.BotonInsertar.setBounds(obj.ventana.getWidth()/6-x/12,450,x/6,50);
         obj.BotonInsertar.setEnabled(false);
-        obj.BotonInsertar.setFont(new Font("arial",3,30));
-        obj.BotonInsertar.setBackground(new Color(27,180,233));
-        obj.BotonInsertar.setForeground(new Color(0,0,0));
+        obj.BotonInsertar.setFont(new Font("arial",3,23));
+        obj.BotonInsertar.setBackground(new Color(0,0,255));
+        obj.BotonInsertar.setForeground(Color.WHITE);
         obj.BotonInsertar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         obj.BotonInsertar.setFocusPainted(false);
         obj.BotonInsertar.removeActionListener(evt);
@@ -252,19 +266,16 @@ public class MotorInterfaz {
         
         
         obj.CerrarSesión.setBounds(obj.ventana.getWidth()/6-x/12,650,x/6,50);
-        obj.CerrarSesión.setFont(new Font("arial",3,30));
-        obj.CerrarSesión.setBackground(new Color(27,180,233));
-        obj.CerrarSesión.setForeground(new Color(0,0,0));
+        obj.CerrarSesión.setFont(new Font("arial",3,23));
+        obj.CerrarSesión.setBackground(Color.RED);
+        obj.CerrarSesión.setForeground(Color.WHITE);
         obj.CerrarSesión.setCursor(new Cursor(Cursor.HAND_CURSOR));
         obj.CerrarSesión.setFocusPainted(false);
         obj.CerrarSesión.removeActionListener(evt);
         obj.CerrarSesión.addActionListener(evt);
         obj.PanelIngreso.add(obj.CerrarSesión);
         
-        obj.PanelTabla.setBounds(x/3,0,2*x/3,y);
-        obj.PanelTabla.setLayout(null);
-        obj.PanelTabla.setBackground(new Color(255,255,204));
-        obj.ventana.add(obj.PanelTabla);
+        obj.PanelTabla.setBackground(new Color(211,211,211));
         
         
         scrollPane.setBounds(50, 250, 2*x/3-100, y-450);
@@ -371,12 +382,12 @@ public class MotorInterfaz {
                 }
   }
     
-  public void ReiniciarTabla(){
+    public void ReiniciarTabla(){
             obj.tabla=new DefaultTableModel();
             obj.TablaVisual.setModel(new DefaultTableModel());
   }  
 
-    void pantallaInsertar() {
+    public void pantallaInsertar() {
         int col=obj.tabla.getColumnCount();
         obj.ventanaInsert.setSize(600, 100*col+100);
         obj.ventanaInsert.getContentPane().setBackground(null);
@@ -421,7 +432,7 @@ public class MotorInterfaz {
     
     
     
-    void pantallaActualiza() {
+    public void pantallaActualiza() {
         obj.ventanaAct.setSize(600, 600);
         obj.ventanaAct.getContentPane().setBackground(null);
         obj.ventanaAct.setResizable(false);
@@ -464,7 +475,7 @@ public class MotorInterfaz {
     
     
 
-    void tipoPS(int i, PreparedStatement ps, String get, String j){
+    public void tipoPS(int i, PreparedStatement ps, String get, String j){
         try{
                 
         switch(get.toLowerCase()){
@@ -488,6 +499,7 @@ public class MotorInterfaz {
         }
         
     }
-
-
+    
+    
+    
 }
