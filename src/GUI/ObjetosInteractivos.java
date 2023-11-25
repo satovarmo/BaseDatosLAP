@@ -2,8 +2,10 @@
 package GUI;
 
 
+import java.awt.Image;
 import java.util.ArrayList;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -15,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+
 public class ObjetosInteractivos {
     MotorInterfaz motint;
       public ObjetosInteractivos(MotorInterfaz motint){
@@ -22,7 +25,16 @@ public class ObjetosInteractivos {
         
     }
     // GUARDAMOS LA INFORMACION DEL USUARIO
-      
+        
+public void AjustarImg(String Rutimg, JLabel J){
+    int w=J.getBounds().width;
+    int h=J.getBounds().height;
+    Image logotipo = new ImageIcon(getClass().getResource(   Rutimg)).getImage();
+    Image imgEscalada = logotipo.getScaledInstance(w, h, Image.SCALE_DEFAULT);
+    ImageIcon icono = new ImageIcon(imgEscalada);
+// Asignar el icono al JLabel
+    J.setIcon(icono);
+}
     public String usuario;
     public String contra;
     ArrayList<String> tablas = new ArrayList<String> ();
@@ -32,19 +44,19 @@ public class ObjetosInteractivos {
     DefaultTableModel tabla =  new DefaultTableModel();
     JTableHeader header = new JTableHeader();
     
-    //PRIMERA PANTALLA (INGRESO DEL NUMERO DE JUGADORES)   
+    //PRIMERA PANTALLA 
+    public ImageIcon logo = new ImageIcon(getClass().getResource("/Imagenes/LogoSinFondo.png"));
     public JFrame ventana=new JFrame();
     public JComboBox TipoUsuario=new JComboBox();
     public JButton BotonAceptar=new JButton("Ingresar");
     public JPanel PanelIngreso=new JPanel();
-    public JLabel Títulobd=new JLabel("CLUB LAP TENIS");
+    public JLabel Títulobd=new JLabel();
     public JPasswordField TextContraseña=new JPasswordField();
-    
-    
-    //SEGUNDA PANTALLA (SELECCIÓN TABLA)   
+  
+
+//SEGUNDA PANTALLA (SELECCIÓN TABLA)   
     
     public JPanel PanelTabla=new JPanel();
-    public JLabel LabelTabla=new JLabel();
     public JComboBox BoxTabla=new JComboBox();
     public JTable TablaVisual=new JTable(){
   // Sobrescribir el método isCellEditable

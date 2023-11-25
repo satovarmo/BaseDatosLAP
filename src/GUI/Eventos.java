@@ -9,6 +9,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import LAP.conectar;
+import java.awt.Font;
 import java.awt.Point;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -29,40 +30,50 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
             motint.obj.contra=motint.obj.TextContraseña.getText();
             if(((String) motint.obj.TipoUsuario.getSelectedItem()).equals("estudiante") ||((String) motint.obj.TipoUsuario.getSelectedItem()).equals("acudiente") || ((String) motint.obj.TipoUsuario.getSelectedItem()).equals("cliente")){
                 motint.obj.contra="";
-            }
-            Connection con=conectar.conect(motint.obj.usuario,motint.obj.contra);
-            if(con==null){
-                JOptionPane.showMessageDialog(null, "El usuario y la contraseña no coinciden");
-                motint.PrimeraPantallaIngreso();
+            }if(motint.obj.usuario.equals("Elige tu usuario") || motint.obj.contra.equals("Ingresa tu contraseña")){
+                JOptionPane.showMessageDialog(null, "Elige un usuario e ingresa una contraseña");
             }else{
-                java.sql.DatabaseMetaData dbmd;
-                ResultSet rs;
-                 try {
-                    dbmd=con.getMetaData();
-                    rs = dbmd.getTables("mydb", null, null, null);
-                    while (rs.next()) {
-                        motint.obj.tablas.add(rs.getString ("TABLE_NAME"));
+                Connection con=conectar.conect(motint.obj.usuario,motint.obj.contra);
+                if(con==null){
+                    JOptionPane.showMessageDialog(null, "El usuario y la contraseña no coinciden");
+                    motint.PrimeraPantallaIngreso();
+                }else{
+                    java.sql.DatabaseMetaData dbmd;
+                    ResultSet rs;
+                     try {
+                        dbmd=con.getMetaData();
+                        rs = dbmd.getTables("mydb", null, null, null);
+                        while (rs.next()) {
+                            motint.obj.tablas.add(rs.getString ("TABLE_NAME"));
+                    }
+                    rs.close();
+                    con.close();
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Debido a un eror se cerrara el programa"+ex);
+                        System.exit(0);
+                    }
+                    motint.seleccionTabla();
+                    motint.obj.ventana.revalidate();
+                    motint.obj.ventana.repaint();
                 }
-                rs.close();
-                con.close();
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Debido a un eror se cerrara el programa"+ex);
-                    System.exit(0);
-                }
-                motint.seleccionTabla();
-                motint.obj.ventana.revalidate();
-                motint.obj.ventana.repaint();
             }
         }
         else if(e.getSource()==motint.obj.TipoUsuario){
                String text=((String) motint.obj.TipoUsuario.getSelectedItem());
-                if(text==null || (!text.equals("acudiente") && !text.equals("estudiante") && !text.equals("cliente"))){
+               if(text!=null){
+                if(text.equals("Elige tu usuario")){
+                    motint.obj.TipoUsuario.setFont(new Font("arial",2,15));
+                    motint.obj.TextContraseña.setText("Ingresa tu contraseña");
+                }else if(!text.equals("acudiente") && !text.equals("estudiante") && !text.equals("cliente")){
+                    motint.obj.TipoUsuario.setFont(new Font("arial",0,15));
                     motint.obj.TextContraseña.setEnabled(true);
                     motint.obj.TextContraseña.setText("Ingresa tu contraseña");
                 }else{
+                    motint.obj.TipoUsuario.setFont(new Font("arial",0,15));
                     motint.obj.TextContraseña.setEnabled(false);
                     motint.obj.TextContraseña.setText("Este perfil no requiere contraseña");
                 }
+               }
         }
         
         else if(e.getSource()==motint.obj.BoxTabla){
@@ -97,9 +108,11 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
         else if(e.getSource()==motint.obj.BotonVisualizar){
             if(motint.obj.TablaVisual.getSelectedRow()>=0){
                 String text=motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), motint.obj.TablaVisual.getSelectedColumn()).toString();
-                JOptionPane.showMessageDialog(null,text);
+                int fila=motint.obj.TablaVisual.getSelectedRow()+1;
+                String m=motint.obj.NombreColumnas.get(motint.obj.TablaVisual.getSelectedColumn())+" para la fila "+fila+" es: ";
+                JOptionPane.showMessageDialog(null,m+text);
             }else{
-                JOptionPane.showMessageDialog(null,"No has seleccionado ninguna fila para ver");
+                JOptionPane.showMessageDialog(null,"No has seleccionado ninguna celda para ver");
             }
         }
         
@@ -318,7 +331,7 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        
+         
     }
     
 
