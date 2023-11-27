@@ -30,9 +30,12 @@ public class ObjetosInteractivos {
     }
     // GUARDAMOS LA INFORMACION DEL USUARIO
 public void ConstructorMenu(){
-        drawer.addChild(eliminar);       
+        drawer.addChild(eliminar);
+        drawer.space(5);
         drawer.addChild(actualizar);
+        drawer.space(5);
         drawer.addChild(insertar);
+        drawer.space(5);
         drawer.addFooter(CerrarSesión);
         drawer.event(motint.evt);    
 }        

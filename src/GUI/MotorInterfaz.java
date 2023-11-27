@@ -160,6 +160,7 @@ public class MotorInterfaz {
     // CREAMOS EL CODIGO PARA LA SEGUNDA PANTALLA, DONDE TIENE ACCESO A LAS TABLAS Y VISTAS, Y A SUS CORRESPONDIENTES PERMISOS
     public void pantallaMenu(){
         obj.ventana.setResizable(false);
+        obj.ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
         JScrollPane scrollPane = new JScrollPane (obj.TablaVisual);
         
         

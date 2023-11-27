@@ -69,10 +69,13 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 }else if(!text.equals("acudiente") && !text.equals("estudiante") && !text.equals("cliente")){
                     motint.obj.TipoUsuario.setFont(new Font("arial",0,15));
                     motint.obj.TextContraseña.setEnabled(true);
+                    motint.obj.TextContraseña.setEchoChar((char)0);
+                    motint.obj.TextContraseña.setForeground(Color.gray);
                     motint.obj.TextContraseña.setText("Ingresa tu contraseña");
                 }else{
                     motint.obj.TipoUsuario.setFont(new Font("arial",0,15));
                     motint.obj.TextContraseña.setEnabled(false);
+                    motint.obj.TextContraseña.setEchoChar((char)0);
                     motint.obj.TextContraseña.setText("Este perfil no requiere contraseña");
                 }
                }
@@ -156,7 +159,6 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 }    
                     sql = "UPDATE "+motint.obj.BoxTabla.getSelectedItem().toString()+" SET `"+motint.obj.NombreColumnas.get(column)+"` = ? WHERE "+text;
                     ps = con.prepareStatement(sql);
-                    System.out.println(sql);
                     motint.tipoPS(1,ps,motint.obj.TipoColumnas.get(column),motint.obj.TextAct.getText());
                     ps.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Se han actualizado los datos");
@@ -298,14 +300,19 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 String texttabla=((String) motint.obj.BoxTabla.getSelectedItem());
                 motint.ReiniciarTabla(texttabla);
             }else{
-                JOptionPane.showMessageDialog(null,"No has seleccionado ninguna fila para ver");
+                JOptionPane.showMessageDialog(null,"No has seleccionado ninguna fila para eliminar");
             }
         }
         
         else if(di==motint.obj.actualizar){
-            column=motint.obj.TablaVisual.getSelectedColumn();
-            fila=motint.obj.TablaVisual.getSelectedRow();
-            motint.pantallaActualiza();
+             if(motint.obj.TablaVisual.getSelectedRow()>=0){
+                column=motint.obj.TablaVisual.getSelectedColumn();
+                fila=motint.obj.TablaVisual.getSelectedRow();
+                motint.pantallaActualiza();
+                }
+             else{
+                 JOptionPane.showMessageDialog(null,"No has seleccionado ninguna casilla para actualizar");
+             }
         }
     }
 
