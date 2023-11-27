@@ -4,11 +4,14 @@ package GUI;
  
 import java.sql.PreparedStatement;
 import LAP.conectar;
+import java.awt.BorderLayout;
 
 
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,6 +30,7 @@ import javax.swing.table.JTableHeader;
 import javaswingdev.drawer.Drawer;
 import javaswingdev.drawer.DrawerController;
 import javaswingdev.drawer.DrawerItem;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
 public class MotorInterfaz {
@@ -52,8 +56,8 @@ public class MotorInterfaz {
     }
 
     public MotorInterfaz(){
-        PrimeraPantallaIngreso();
         CreacionVentana();
+        PrimeraPantallaIngreso();
         
     }
     
@@ -62,19 +66,15 @@ public class MotorInterfaz {
     public void CreacionVentana(){
         obj.ventana.setDefaultLookAndFeelDecorated(true);
         obj.ventana.setIconImage(obj.logo.getImage());
-        obj.ventana.setSize(800, 600);
+        obj.ventana.setSize(450, 700);
         obj.ventana.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        obj.ventana.getContentPane().setBackground(null);
-        obj.ventana.setResizable(false);
-        obj.ventana.setLayout(null);
-        obj.ventana.setVisible(true);
-        obj.ventana.setLocationRelativeTo(null);
+        obj.ventana.setLayout(new BorderLayout());
         obj.ventana.setTitle("CLUB DE TENIS LAP");
     }
     
     
     // FUNCIÓN QUE HABILITA LOS BOTONES BASADO EN LOS PERMISOS D QUIEN INGRESA
-  public void HabilitarBotones(String a){
+    public void HabilitarBotones(String a){
         obj.BotonInsertar.setEnabled(false);
         obj.BotonEliminar.setEnabled(false);
         obj.BotonActualizar.setEnabled(false);
@@ -119,37 +119,42 @@ public class MotorInterfaz {
     // CREAMOS EL CODIGO PARA LA PRIMERA PANTALLA QUE VERÁ EL USUARIO
     
     public void PrimeraPantallaIngreso(){
-        obj.ventana.remove(obj.PanelTabla);
-        obj.ventana.setSize(800, 600);
-        obj.PanelIngreso.removeAll();
-        obj.PanelIngreso.setBounds(0,0,800,600);
-        obj.PanelIngreso.setLayout(null);
+        
+        obj.ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        obj.ventana.setLocationRelativeTo(null);
+        obj.ventana.add(obj.PanelIngreso, BorderLayout.CENTER);
+        
         obj.PanelIngreso.setBackground(new Color(173,216,230));
-        obj.ventana.add(obj.PanelIngreso);
+        obj.PanelIngreso.setLayout(new GridBagLayout());
         
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
+        constraints.weightx = 0; // El espacio extra se distribuye al componente
+        constraints.weighty = 1; // El espacio extra se distribuye al componente
+        constraints.gridx = 0;
         
-        obj.Títulobd.setBounds(240,10,320,200);
         obj.Títulobd.setBorder(null);
         obj.Títulobd.setBackground(null);
         obj.Títulobd.setVisible(true);
-        int w=obj.Títulobd.getWidth();
-        int h=obj.Títulobd.getHeight();
+        int w=320;
+        int h=200;
         ImageIcon ic=obj.AjustarImg("/Imagenes/LogotipoSinFondo.png", w,h);
         obj.Títulobd.setIcon(ic);
-        obj.PanelIngreso.add(obj.Títulobd);
+        constraints.gridy = 0; // La posición y del componente
+        obj.PanelIngreso.add(obj.Títulobd, constraints);
 
         
         JLabel TextoEnt=new JLabel();
-        TextoEnt.setBounds(225,210,350,20);
         TextoEnt.setFont(new Font("arial",1,20));
         TextoEnt.setText("BIENVENIDO A LA BASE DE DATOS");
         TextoEnt.setBorder(null);
         TextoEnt.setBackground(null);
         TextoEnt.setForeground(new Color(31,73,155));
         TextoEnt.setVisible(true);
-        obj.PanelIngreso.add(TextoEnt);
+        constraints.gridy = 1;
+        obj.PanelIngreso.add(TextoEnt,constraints);
         
-        obj.TipoUsuario.setBounds(300,270,200,50);
+        
         obj.TipoUsuario.setFont(new Font("arial",2,15));
         obj.TipoUsuario.setBorder(null);
         obj.TipoUsuario.setForeground(Color.RED);
@@ -166,10 +171,10 @@ public class MotorInterfaz {
         obj.TipoUsuario.removeActionListener(evt);
         obj.TipoUsuario.addActionListener(evt);
         obj.TipoUsuario.setVisible(true);
-        obj.PanelIngreso.add(obj.TipoUsuario);
+        constraints.gridy = 2;
+        obj.PanelIngreso.add(obj.TipoUsuario,constraints);
         
         
-        obj.TextContraseña.setBounds(300,350,200,50);
         obj.TextContraseña.setText("Ingresa tu contraseña");
         obj.TextContraseña.setEditable(true);
         obj.TextContraseña.setFont(new Font("arial",0,12));
@@ -179,27 +184,28 @@ public class MotorInterfaz {
         obj.TextContraseña.addFocusListener(evt);
         obj.TextContraseña.addActionListener(evt);
         obj.TextContraseña.setVisible(true);
-        obj.PanelIngreso.add(obj.TextContraseña);
+        constraints.gridy = 3;
+        obj.PanelIngreso.add(obj.TextContraseña,constraints);
         
                  
         obj.BotonAceptar.setFont(new Font("arial",3,23));
         obj.BotonAceptar.setBackground(new Color(0,0,255));
-        obj.BotonAceptar.setBounds(225,420,350,50);
         obj.BotonAceptar.setForeground(Color.WHITE);
         obj.BotonAceptar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         obj.BotonAceptar.setFocusPainted(false);
         obj.BotonAceptar.removeActionListener(evt);
         obj.BotonAceptar.addActionListener(evt);
-        obj.PanelIngreso.add(obj.BotonAceptar);
+        constraints.gridy=4;
+        obj.PanelIngreso.add(obj.BotonAceptar,constraints);
         
         
+        obj.ventana.setVisible(true);
     }
     
     
     // CREAMOS EL CODIGO PARA LA SEGUNDA PANTALLA, DONDE TIENE ACCESO A LAS TABLAS Y VISTAS, Y A SUS CORRESPONDIENTES PERMISOS
     public void seleccionTabla(){
         obj.PanelIngreso.removeAll();
-        obj.ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
         int x=obj.ventana.getWidth();
         int y=obj.ventana.getHeight();
         obj.PanelIngreso.setBounds(0,0,x/3,y);
@@ -507,7 +513,6 @@ public class MotorInterfaz {
     
     public void pantallaMenu(){
         
-        
         obj.drawer.header(new JLabel("Bienvenido "+obj.usuario));
         
         obj.drawer.addChild(new DrawerItem("Elimina fila").icon(obj.AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build());       
@@ -515,10 +520,20 @@ public class MotorInterfaz {
         obj.drawer.addChild(new DrawerItem("Insertar fila").icon(obj.AjustarImg("/Imagenes/insertar.png", 30, 30)).build());       
         obj.drawer.build();
         
+        obj.ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        obj.ventana.setLocationRelativeTo(null);
+        
+        obj.PanelTabla.setBackground(new Color(173,216,230));
+        obj.PanelTabla.setLayout(new GridBagLayout());
+        
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
+        constraints.gridx = 0; // La posición x del componente
+        constraints.gridy = 0; // La posición y del componente
+        constraints.anchor = GridBagConstraints.FIRST_LINE_START;
         
         
-        
-        obj.btnPanel.setBounds(0,0,50,50);
+        obj.btnPanel.setSize(100,100);
         obj.btnPanel.setFont(new Font("arial",3,10));
         obj.btnPanel.setBackground(new Color(27,180,233));
         obj.btnPanel.setForeground(new Color(0,0,0));
@@ -526,7 +541,10 @@ public class MotorInterfaz {
         obj.btnPanel.setFocusPainted(false);
         obj.btnPanel.removeActionListener(evt);
         obj.btnPanel.addActionListener(evt);
-        obj.ventana.add(obj.btnPanel);
+        obj.PanelTabla.add(obj.btnPanel,constraints);
+        
+        obj.ventana.add(obj.PanelTabla,BorderLayout.CENTER);
+        obj.ventana.setVisible(true);
     
     }
 }
