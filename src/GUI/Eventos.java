@@ -15,8 +15,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.PreparedStatement;
+import javaswingdev.drawer.DrawerItem;
+import javaswingdev.drawer.EventDrawer;
 
-public class Eventos implements ActionListener, FocusListener, MouseListener{
+public class Eventos implements EventDrawer,ActionListener, FocusListener, MouseListener{
     MotorInterfaz motint;
     public Eventos(MotorInterfaz motint){
         this.motint=motint;
@@ -52,12 +54,8 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
                         JOptionPane.showMessageDialog(null, "Debido a un eror se cerrara el programa"+ex);
                         System.exit(0);
                     }
-                    motint.obj.ventana.remove(motint.obj.PanelIngreso);
-                    motint.obj.ventana.revalidate();
-                    motint.obj.ventana.repaint();
-                    motint.pantallaMenu();
-                    motint.obj.ventana.revalidate();
-                    motint.obj.ventana.repaint();
+                    motint.obj.ventana.setVisible(false);
+                    motint.ElegirTabla();
                 }
             }
         }
@@ -79,76 +77,21 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
                }
         }
         
-        else if(e.getSource()==motint.obj.BoxTabla){
+        else if(e.getSource()==motint.obj.BotonAceptarTab){
                String text=((String) motint.obj.BoxTabla.getSelectedItem());
                 if(text==null || text.equals("")){
-                    motint.obj.BotonInsertar.setEnabled(false);
-                    motint.obj.BotonEliminar.setEnabled(false);
-                    motint.obj.BotonActualizar.setEnabled(false);
-                    motint.obj.BotonVisualizar.setEnabled(false);
+                    JOptionPane.showMessageDialog(null, "Debes elegir una tabla");
                 }else{
-                    motint.ReiniciarTabla();
-                    motint.InfoTabla(text);
-                    motint.MostrarTabla();
-                    motint.HabilitarBotones(text);
+                    motint.ReiniciarTabla(text);
+                    motint.obj.ventanaTab.dispose();
+                    motint.obj.ventana.remove(motint.obj.PanelIngreso);
+                    motint.pantallaMenu();
                     motint.obj.ventana.revalidate();
                     motint.obj.ventana.repaint();
                 }
         }
-        
-        
-        else if(e.getSource()==motint.obj.CerrarSesión){
-            motint.obj.usuario="";
-            motint.obj.contra="";
-            motint.obj.tablas.clear();
-            motint.ReiniciarTabla();
-            motint.PrimeraPantallaIngreso();
-            motint.obj.ventana.revalidate();
-            motint.obj.ventana.repaint();
-        }
-        
-        
-        else if(e.getSource()==motint.obj.BotonVisualizar){
-            if(motint.obj.TablaVisual.getSelectedRow()>=0){
-                String text=motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), motint.obj.TablaVisual.getSelectedColumn()).toString();
-                int fila=motint.obj.TablaVisual.getSelectedRow()+1;
-                String m=motint.obj.NombreColumnas.get(motint.obj.TablaVisual.getSelectedColumn())+" para la fila "+fila+" es: ";
-                JOptionPane.showMessageDialog(null,m+text);
-            }else{
-                JOptionPane.showMessageDialog(null,"No has seleccionado ninguna celda para ver");
-            }
-        }
-        
-        else if(e.getSource()==motint.obj.BotonEliminar){
-            motint.MostrarTabla();
-            motint.obj.Botones.removeAll();
-            motint.obj.Botones.add(motint.obj.BotonEliminarFila);
-            motint.obj.ventana.revalidate();
-            motint.obj.ventana.repaint();
-        }
-
-
-        
-        else if(e.getSource()==motint.obj.BotonActualizar){
-            motint.MostrarTabla();
-            motint.obj.Botones.removeAll();
-            motint.obj.Botones.add(motint.obj.BotonActualizarFila);
-            
-            motint.obj.ventana.revalidate();
-            motint.obj.ventana.repaint();
-        }        
-                
-        else if(e.getSource()==motint.obj.BotonInsertar){
-            motint.obj.Botones.removeAll();
-            motint.MostrarTabla();
-            motint.pantallaInsertar();
-        }       
-         
-                
-                
-                
         else if(e.getSource()==motint.obj.BotonInsertarFila){
-            int n=motint.obj.NombreColumnas.size();
+        int n=motint.obj.NombreColumnas.size();
             boolean comprobacion=true;
             for (int i=0;i<n;i++){
                 if(motint.obj.listText[i].getText().equals("Ingresa "+motint.obj.NombreColumnas.get(i)) || motint.obj.listText[i].getText().equals("")){
@@ -176,64 +119,12 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
                 }
                 motint.obj.ventanaInsert.dispose();
                 String text=((String) motint.obj.BoxTabla.getSelectedItem());
-                motint.ReiniciarTabla();
-                motint.InfoTabla(text);
-                motint.MostrarTabla();
+                motint.ReiniciarTabla(text);
             }else{
                 JOptionPane.showMessageDialog(null, "Rellene los campos completamente");
             } 
-        }   
-        
-        
-        else if(e.getSource()==motint.obj.BotonVerFila){
-            
         }
         
-        
-        else if(e.getSource()==motint.obj.BotonEliminarFila){
-            if(motint.obj.TablaVisual.getSelectedRow()>=0){
-                Object[] col=new Object[motint.obj.TablaVisual.getColumnCount()];
-                String text="";
-                for(int i=0;i<motint.obj.TablaVisual.getColumnCount();i++){
-                String c=motint.obj.TipoColumnas.get(i);
-                switch(c){
-                    case "int":
-                        text=text+"`"+(motint.obj.NombreColumnas.get(i))+"` = "+motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), i).toString();
-                        break;
-                    case "bigint":
-                        text=text+"`"+(motint.obj.NombreColumnas.get(i))+"` = "+motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), i).toString();
-                        break;
-                    case "long":
-                        text=text+"`"+(motint.obj.NombreColumnas.get(i))+"` = "+motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), i).toString();
-                        break;
-                    case "varchar(45)":
-                        text=text+"`"+(motint.obj.NombreColumnas.get(i))+"` = '"+motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), i).toString()+"'";
-                        break;
-                }
-                        if(i!=col.length-1){
-                            text=text+" AND ";
-                        }
-                      
-                }    
-                PreparedStatement ps;
-                String sql;
-                try{
-                    Connection con = conectar.conect(motint.obj.usuario,motint.obj.contra);
-                    sql = "delete from "+motint.obj.BoxTabla.getSelectedItem().toString()+" where ("+text+")";
-                    ps = con.prepareStatement(sql);
-                    ps.executeUpdate();
-                    JOptionPane.showMessageDialog(null, "Se han eliminado los datos");
-                }catch(SQLException ex){
-                    JOptionPane.showMessageDialog(null, "Error de conexión:" + ex.getMessage());
-                }
-                String texttabla=((String) motint.obj.BoxTabla.getSelectedItem());
-                motint.ReiniciarTabla();
-                motint.InfoTabla(texttabla);
-                motint.MostrarTabla();
-            }else{
-                JOptionPane.showMessageDialog(null,"No has seleccionado ninguna fila para ver");
-            }
-        }
         else if(e.getSource()==motint.obj.BotonAceptarFila){
             if (!motint.obj.TextAct.getText().equals("Ingresa el dato")){
                 PreparedStatement ps;
@@ -273,20 +164,15 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
                 }
                 motint.obj.ventanaAct.dispose();
                 String text=((String) motint.obj.BoxTabla.getSelectedItem());
-                motint.ReiniciarTabla();
-                motint.InfoTabla(text);
-                motint.MostrarTabla();
+                motint.ReiniciarTabla(text);
             }else{
                 JOptionPane.showMessageDialog(null, "Inserte los datos");
             } 
         }   
         
         
-        else if(e.getSource()==motint.obj.BotonActualizarFila){
-            column=motint.obj.TablaVisual.getSelectedColumn();
-            fila=motint.obj.TablaVisual.getSelectedRow();
-            motint.pantallaActualiza();
-        }
+        
+        
         else if(e.getSource()==motint.obj.btnPanel){
             if(motint.obj.drawer.isShow()){
                 motint.obj.drawer.hide();
@@ -337,7 +223,28 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-         
+         if(e.getSource()==motint.obj.TituloTabla && e.getClickCount()==2){
+             String text=((String) motint.obj.TituloTabla.getText());
+                if(text==null || text.equals("")){
+                    motint.obj.insertar.setEnabled(false);
+                    motint.obj.eliminar.setEnabled(false);
+                    motint.obj.actualizar.setEnabled(false);
+                }else{
+                    motint.ReiniciarTabla(text);
+                    motint.obj.ventana.revalidate();
+                    motint.obj.ventana.repaint();
+                }
+         }
+         else{
+         if(motint.obj.TablaVisual.getSelectedRow()>=0){
+                String text=motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), motint.obj.TablaVisual.getSelectedColumn()).toString();
+                int fila=motint.obj.TablaVisual.getSelectedRow()+1;
+                String m=motint.obj.NombreColumnas.get(motint.obj.TablaVisual.getSelectedColumn())+" para la fila "+fila+" es: ";
+                JOptionPane.showMessageDialog(null,m+text);
+            }else{
+                JOptionPane.showMessageDialog(null,"No has seleccionado ninguna celda para ver");
+            }
+         }
     }
     
 
@@ -359,6 +266,74 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
     @Override
     public void mouseExited(MouseEvent e) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void selected(int j, DrawerItem di) {
+        if(di==motint.obj.CerrarSesión){
+            motint.obj.usuario="";
+            motint.obj.contra="";
+            motint.obj.tablas.clear();
+            motint.ReiniciarTabla("");
+            motint.obj.ventana.remove(motint.obj.PanelTabla);
+            motint.obj.drawer.hide();
+            motint.PrimeraPantallaIngreso();
+            motint.obj.ventana.revalidate();
+            motint.obj.ventana.repaint();
+        }
+        
+        else if(di==motint.obj.insertar){
+            motint.pantallaInsertar();
+        }   
+        
+        else if(di==motint.obj.eliminar){
+            if(motint.obj.TablaVisual.getSelectedRow()>=0){
+                Object[] col=new Object[motint.obj.TablaVisual.getColumnCount()];
+                String text="";
+                for(int i=0;i<motint.obj.TablaVisual.getColumnCount();i++){
+                String c=motint.obj.TipoColumnas.get(i);
+                switch(c){
+                    case "int":
+                        text=text+"`"+(motint.obj.NombreColumnas.get(i))+"` = "+motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), i).toString();
+                        break;
+                    case "bigint":
+                        text=text+"`"+(motint.obj.NombreColumnas.get(i))+"` = "+motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), i).toString();
+                        break;
+                    case "long":
+                        text=text+"`"+(motint.obj.NombreColumnas.get(i))+"` = "+motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), i).toString();
+                        break;
+                    case "varchar(45)":
+                        text=text+"`"+(motint.obj.NombreColumnas.get(i))+"` = '"+motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), i).toString()+"'";
+                        break;
+                }
+                        if(i!=col.length-1){
+                            text=text+" AND ";
+                        }
+                      
+                }    
+                PreparedStatement ps;
+                String sql;
+                try{
+                    Connection con = conectar.conect(motint.obj.usuario,motint.obj.contra);
+                    sql = "delete from "+motint.obj.BoxTabla.getSelectedItem().toString()+" where ("+text+")";
+                    ps = con.prepareStatement(sql);
+                    ps.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Se han eliminado los datos");
+                }catch(SQLException ex){
+                    JOptionPane.showMessageDialog(null, "Error de conexión:" + ex.getMessage());
+                }
+                String texttabla=((String) motint.obj.BoxTabla.getSelectedItem());
+                motint.ReiniciarTabla(texttabla);
+            }else{
+                JOptionPane.showMessageDialog(null,"No has seleccionado ninguna fila para ver");
+            }
+        }
+        
+        else if(di==motint.obj.actualizar){
+            column=motint.obj.TablaVisual.getSelectedColumn();
+            fila=motint.obj.TablaVisual.getSelectedRow();
+            motint.pantallaActualiza();
+        }
     }
 
 

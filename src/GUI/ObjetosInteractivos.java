@@ -5,6 +5,7 @@ package GUI;
 import java.awt.Image;
 import java.util.ArrayList;
 import javaswingdev.drawer.Drawer;
+import javaswingdev.drawer.DrawerItem;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,13 +21,21 @@ import javax.swing.table.JTableHeader;
 
 
 public class ObjetosInteractivos {
+    
     MotorInterfaz motint;
       public ObjetosInteractivos(MotorInterfaz motint){
-        this.motint=motint;
-        
+          
+          this.motint=motint;
+            ConstructorMenu();
     }
     // GUARDAMOS LA INFORMACION DEL USUARIO
-        
+public void ConstructorMenu(){
+        drawer.addChild(eliminar);       
+        drawer.addChild(actualizar);
+        drawer.addChild(insertar);
+        drawer.addFooter(CerrarSesión);
+        drawer.event(motint.evt);    
+}        
 public ImageIcon AjustarImg(String Rutimg, int w, int h){
     Image logotipo = new ImageIcon(getClass().getResource(   Rutimg)).getImage();
     Image imgEscalada = logotipo.getScaledInstance(w, h, Image.SCALE_SMOOTH);
@@ -52,10 +61,9 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     public JPasswordField TextContraseña=new JPasswordField();
   
 
-//SEGUNDA PANTALLA (SELECCIÓN TABLA)   
+//SEGUNDA PANTALLA 
     
     public JPanel PanelTabla=new JPanel();
-    public JComboBox BoxTabla=new JComboBox();
     public JTable TablaVisual=new JTable(){
   // Sobrescribir el método isCellEditable
    @Override
@@ -64,17 +72,25 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
                 return false;
             }
 };
-    public JButton BotonInsertar=new JButton("Insertar");
-    public JButton BotonEliminar=new JButton("Eliminar");
-    public JButton BotonActualizar=new JButton("Actualizar");
-    public JButton BotonVisualizar=new JButton("Visualizar celda");
+    public JLabel TituloTabla=new JLabel();
     
-    public JButton CerrarSesión=new JButton("Cerrar sesión");
     
-    public JLabel Botones=new JLabel();
-    public JButton BotonVerFila=new JButton("Ver Fila");
-    public JButton BotonEliminarFila=new JButton("Eliminar Fila");
-    public JButton BotonActualizarFila=new JButton("Actualizar Fila");
+    
+    public DrawerItem eliminar=new DrawerItem("Eliminar fila").icon(AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build();
+    public DrawerItem actualizar=new DrawerItem("Actualizar celda").icon(AjustarImg("/Imagenes/actualizar.png", 30, 30)).build();
+    public DrawerItem insertar=(new DrawerItem("Insertar fila").icon(AjustarImg("/Imagenes/insertar.png", 30, 30))).build();
+    public DrawerItem CerrarSesión=(new DrawerItem("CERRAR SESIÓN").icon(AjustarImg("/Imagenes/insertar.png", 30, 30))).build();
+    
+    
+    
+    
+    
+    //PANTALLA PARA (SELECCIÓN TABLA)   
+    public JFrame ventanaTab=new JFrame();
+    public JPanel PanelTab=new JPanel();
+    public JComboBox BoxTabla=new JComboBox();
+    public JButton BotonAceptarTab=new JButton("Aceptar");
+    
     
     //PANTALLA PARA INSERCIÓN
     public JFrame ventanaInsert=new JFrame();

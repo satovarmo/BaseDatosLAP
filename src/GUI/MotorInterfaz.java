@@ -27,10 +27,6 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javaswingdev.drawer.Drawer;
-import javaswingdev.drawer.DrawerController;
-import javaswingdev.drawer.DrawerItem;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
 public class MotorInterfaz {
@@ -61,7 +57,6 @@ public class MotorInterfaz {
         
     }
     
-    public JScrollPane scrollPane = new JScrollPane (obj.TablaVisual);;
     // CREAMOS LA VENTANA 
     public void CreacionVentana(){
         obj.ventana.setDefaultLookAndFeelDecorated(true);
@@ -69,59 +64,15 @@ public class MotorInterfaz {
         obj.ventana.setSize(450, 700);
         obj.ventana.setDefaultCloseOperation(EXIT_ON_CLOSE);
         obj.ventana.setLayout(new BorderLayout());
+        obj.ventana.setLocationRelativeTo(null);
         obj.ventana.setTitle("CLUB DE TENIS LAP");
     }
-    
-    
-    // FUNCIÓN QUE HABILITA LOS BOTONES BASADO EN LOS PERMISOS D QUIEN INGRESA
-    public void HabilitarBotones(String a){
-        obj.BotonInsertar.setEnabled(false);
-        obj.BotonEliminar.setEnabled(false);
-        obj.BotonActualizar.setEnabled(false);
-        obj.BotonVisualizar.setEnabled(false);
-        ArrayList<String> permisos = new ArrayList<> ();
-        Connection con=conectar.conect(obj.usuario,obj.contra);
-            ResultSet rs;
-             try {
-               PreparedStatement st = con.prepareStatement ("select privilege_type from information_schema.table_privileges where table_name = ? and grantee = ?");
-               st.setString (1, a);
-               st.setString (2, "'"+obj.usuario+"'@'localhost'");
-
-               // Ejecutar la consulta y obtener el resultado
-               rs = st.executeQuery ();
-
-               // Recorrer el ResultSet y mostrar los permisos
-               while (rs.next ()) {
-                 permisos.add(rs.getString ("privilege_type"));
-               }
-               rs.close();
-                st.close(); 
-                con.close();
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Debido a un eror se cerrara el programa"+ex);
-                System.exit(0);
-            }
-            if(permisos.indexOf("SELECT")>=0){
-                obj.BotonVisualizar.setEnabled(true);
-            } 
-            if(permisos.indexOf("INSERT")>=0){
-                obj.BotonInsertar.setEnabled(true);       
-            } 
-            if(permisos.indexOf("UPDATE")>=0){
-                obj.BotonActualizar.setEnabled(true);
-            } 
-            if(permisos.indexOf("DELETE")>=0){
-                obj.BotonEliminar.setEnabled(true);
-            }
-            }
-    
     
     // CREAMOS EL CODIGO PARA LA PRIMERA PANTALLA QUE VERÁ EL USUARIO
     
     public void PrimeraPantallaIngreso(){
-        
+        obj.PanelIngreso.removeAll();
         obj.ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        obj.ventana.setLocationRelativeTo(null);
         obj.ventana.add(obj.PanelIngreso, BorderLayout.CENTER);
         
         obj.PanelIngreso.setBackground(new Color(173,216,230));
@@ -204,144 +155,157 @@ public class MotorInterfaz {
     
     
     // CREAMOS EL CODIGO PARA LA SEGUNDA PANTALLA, DONDE TIENE ACCESO A LAS TABLAS Y VISTAS, Y A SUS CORRESPONDIENTES PERMISOS
-    public void seleccionTabla(){
-        obj.PanelIngreso.removeAll();
-        int x=obj.ventana.getWidth();
-        int y=obj.ventana.getHeight();
-        obj.PanelIngreso.setBounds(0,0,x/3,y);
-        obj.PanelTabla.setBounds(x/3,0,2*x/3,y);
-        obj.PanelTabla.setLayout(null);
-        obj.PanelTabla.setBackground(Color.gray);
-        obj.ventana.add(obj.PanelTabla);
+    public void pantallaMenu(){
+        
+        JScrollPane scrollPane = new JScrollPane (obj.TablaVisual);
         
         
-        obj.BoxTabla.setBounds(obj.ventana.getWidth()/6-x/12,50,x/6,50);
-        obj.BoxTabla.setFont(new Font("arial",0,15));
-        obj.BoxTabla.setBorder(null);
-        obj.BoxTabla.setForeground(new Color(39, 40, 80));
-        obj.BoxTabla.removeAllItems();
-        obj.BoxTabla.removeActionListener(evt);
-        obj.BoxTabla.addActionListener(evt);
-        obj.BoxTabla.addItem("");
-        for(int i=0;i<obj.tablas.size();i++){
-            obj.BoxTabla.addItem(obj.tablas.get(i));
-        }
-        obj.BoxTabla.setVisible(true);
-        obj.PanelIngreso.add(obj.BoxTabla);
+        obj.drawer.header(new JLabel("Bienvenido "+obj.usuario));
+        obj.drawer.build();
+        
+        obj.PanelTabla.setBackground(new Color(173,216,230));
+        obj.PanelTabla.setLayout(new GridBagLayout());
+        
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
+        constraints.gridx = 0; // La posición x del componente
+        constraints.gridy = 0; // La posición y del componente
+        constraints.anchor = GridBagConstraints.FIRST_LINE_START;
         
         
-        obj.BotonVisualizar.setBounds(obj.ventana.getWidth()/6-x/12,150,x/6,50);
-        obj.BotonVisualizar.setEnabled(false);
-        obj.BotonVisualizar.setFont(new Font("arial",3,18));
-        obj.BotonVisualizar.setBackground(new Color(0,0,255));
-        obj.BotonVisualizar.setForeground(Color.WHITE);
-        obj.BotonVisualizar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        obj.BotonVisualizar.setFocusPainted(false);
-        obj.BotonVisualizar.removeActionListener(evt);
-        obj.BotonVisualizar.addActionListener(evt);
-        obj.PanelIngreso.add(obj.BotonVisualizar);
-        
-        obj.BotonEliminar.setBounds(obj.ventana.getWidth()/6-x/12,250,x/6,50);
-        obj.BotonEliminar.setEnabled(false);
-        obj.BotonEliminar.setFont(new Font("arial",3,23));
-        obj.BotonEliminar.setBackground(new Color(0,0,255));
-        obj.BotonEliminar.setForeground(Color.WHITE);
-        obj.BotonEliminar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        obj.BotonEliminar.setFocusPainted(false);
-        obj.BotonEliminar.removeActionListener(evt);
-        obj.BotonEliminar.addActionListener(evt);
-        obj.PanelIngreso.add(obj.BotonEliminar);
-        
-        obj.BotonActualizar.setBounds(obj.ventana.getWidth()/6-x/12,350,x/6,50);
-        obj.BotonActualizar.setEnabled(false);
-        obj.BotonActualizar.setFont(new Font("arial",3,23));
-        obj.BotonActualizar.setBackground(new Color(0,0,255));
-        obj.BotonActualizar.setForeground(Color.WHITE);
-        obj.BotonActualizar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        obj.BotonActualizar.setFocusPainted(false);
-        obj.BotonActualizar.removeActionListener(evt);
-        obj.BotonActualizar.addActionListener(evt);
-        obj.PanelIngreso.add(obj.BotonActualizar);
-        
-        obj.BotonInsertar.setBounds(obj.ventana.getWidth()/6-x/12,450,x/6,50);
-        obj.BotonInsertar.setEnabled(false);
-        obj.BotonInsertar.setFont(new Font("arial",3,23));
-        obj.BotonInsertar.setBackground(new Color(0,0,255));
-        obj.BotonInsertar.setForeground(Color.WHITE);
-        obj.BotonInsertar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        obj.BotonInsertar.setFocusPainted(false);
-        obj.BotonInsertar.removeActionListener(evt);
-        obj.BotonInsertar.addActionListener(evt);
-        obj.PanelIngreso.add(obj.BotonInsertar);
+        obj.btnPanel.setSize(100,100);
+        obj.btnPanel.setFont(new Font("arial",3,10));
+        obj.btnPanel.setBackground(new Color(27,180,233));
+        obj.btnPanel.setForeground(new Color(0,0,0));
+        obj.btnPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        obj.btnPanel.setFocusPainted(false);
+        obj.btnPanel.removeActionListener(evt);
+        obj.btnPanel.addActionListener(evt);
+        obj.PanelTabla.add(obj.btnPanel,constraints);
         
         
         
-        obj.CerrarSesión.setBounds(obj.ventana.getWidth()/6-x/12,650,x/6,50);
-        obj.CerrarSesión.setFont(new Font("arial",3,23));
-        obj.CerrarSesión.setBackground(Color.RED);
-        obj.CerrarSesión.setForeground(Color.WHITE);
-        obj.CerrarSesión.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        obj.CerrarSesión.setFocusPainted(false);
-        obj.CerrarSesión.removeActionListener(evt);
-        obj.CerrarSesión.addActionListener(evt);
-        obj.PanelIngreso.add(obj.CerrarSesión);
         
-        obj.PanelTabla.setBackground(new Color(211,211,211));
+        constraints.gridx = 1; // La posición x del componente
         
         
-        scrollPane.setBounds(50, 250, 2*x/3-100, y-450);
+        
+        obj.TituloTabla.setFont(new Font("arial",1,20));
+        obj.TituloTabla.setText(((String) obj.BoxTabla.getSelectedItem()).toUpperCase());
+        obj.TituloTabla.setBorder(null);
+        obj.TituloTabla.setBackground(null);
+        obj.TituloTabla.setForeground(new Color(31,73,155));
+        obj.TituloTabla.setVisible(true);
+        obj.TituloTabla.removeMouseListener(evt);
+        obj.TituloTabla.addMouseListener(evt);
+        constraints.gridy = 2;
+        obj.PanelTabla.add(obj.TituloTabla,constraints);
+        
+        
         obj.TablaVisual.setFont(new Font("arial",0,18));
         obj.TablaVisual.setAutoResizeMode (JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
         obj.TablaVisual.setRowHeight (50);
         obj.TablaVisual.setRowSelectionAllowed(true);
         obj.TablaVisual.setColumnSelectionAllowed(true);
-        obj.PanelTabla.add(scrollPane);
+        constraints.gridy = 3; // La posición y del componente
+        obj.PanelTabla.add(scrollPane,constraints);
+        
+        
+        
+        constraints.gridy = 4; // La posición y del componente
         obj.header=new JTableHeader();
         obj.header=obj.TablaVisual.getTableHeader();
-        obj.header.setBounds(50,200, 2*x/3-100, 50);
         obj.header.setFont(new Font("arial",3,25));
-        obj.PanelTabla.add(obj.header);
+        obj.PanelTabla.add(obj.header,constraints);
         
         
         
-        obj.Botones.setBounds(x/3-75,y-150,150,50);
-        obj.PanelTabla.add(obj.Botones);
         
-        obj.BotonVerFila.setBounds(0,0,150,50);
-        obj.BotonVerFila.setFont(new Font("arial",3,20));
-        obj.BotonVerFila.setBackground(new Color(27,180,233));
-        obj.BotonVerFila.setForeground(new Color(0,0,0));
-        obj.BotonVerFila.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        obj.BotonVerFila.setFocusPainted(false);
-        obj.BotonVerFila.removeActionListener(evt);
-        obj.BotonVerFila.addActionListener(evt);
-        
-        obj.BotonEliminarFila.setBounds(0,0,150,50);
-        obj.BotonEliminarFila.setFont(new Font("arial",3,20));
-        obj.BotonEliminarFila.setBackground(new Color(27,180,233));
-        obj.BotonEliminarFila.setForeground(new Color(0,0,0));
-        obj.BotonEliminarFila.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        obj.BotonEliminarFila.setFocusPainted(false);
-        obj.BotonEliminarFila.removeActionListener(evt);
-        obj.BotonEliminarFila.addActionListener(evt);
+        obj.ventana.add(obj.PanelTabla,BorderLayout.CENTER);
+        obj.ventana.setVisible(true);
         
         
-        obj.BotonActualizarFila.setBounds(0,0,150,50);
-        obj.BotonActualizarFila.setFont(new Font("arial",3,20));
-        obj.BotonActualizarFila.setBackground(new Color(27,180,233));
-        obj.BotonActualizarFila.setForeground(new Color(0,0,0));
-        obj.BotonActualizarFila.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        obj.BotonActualizarFila.setFocusPainted(false);
-        obj.BotonActualizarFila.removeActionListener(evt);
-        obj.BotonActualizarFila.addActionListener(evt);
         
     }
     
-    public void MostrarTabla(){
-        obj.TablaVisual.setModel(obj.tabla);
     
+    // CREAMOS LA PANTALLA PARA LA ELECCIÓN DE TABLAS
+    void ElegirTabla() {
+        obj.ventanaTab.setSize(450, 700);
+        obj.ventanaTab.getContentPane().setBackground(null);
+        obj.ventanaTab.setResizable(false);
+        obj.ventanaTab.setLayout(new BorderLayout());
+        obj.ventanaTab.setLocationRelativeTo(null);
+        obj.ventanaTab.setTitle("Elegir tabla");
+        
+        
+        obj.PanelTab.removeAll();
+        obj.PanelTab.setLayout(new GridBagLayout());
+        obj.PanelTab.setBackground(new Color(217,235,255));
+        
+        obj.ventanaTab.add(obj.PanelTab, BorderLayout.CENTER);
+        
+        
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
+        constraints.weightx = 0; // El espacio extra se distribuye al componente
+        constraints.weighty = 1; // El espacio extra se distribuye al componente
+        constraints.gridx = 0;
+        
+        constraints.gridy = 0; // La posición y del componente
+        obj.PanelTab.add(obj.Títulobd, constraints);
+        
+        
+        
+        JLabel TextoEnt=new JLabel();
+        TextoEnt.setFont(new Font("arial",1,20));
+        TextoEnt.setText("ELIGE TU TABLA");
+        TextoEnt.setBorder(null);
+        TextoEnt.setBackground(null);
+        TextoEnt.setForeground(new Color(31,73,155));
+        TextoEnt.setVisible(true);
+        constraints.gridy = 1;
+        obj.PanelTab.add(TextoEnt,constraints);
+        
+        
+        obj.BoxTabla.setFont(new Font("arial",0,15));
+        obj.BoxTabla.setBorder(null);
+        obj.BoxTabla.setForeground(new Color(39, 40, 80));
+        obj.BoxTabla.removeAllItems();
+        obj.BoxTabla.addItem("");
+        for(int i=0;i<obj.tablas.size();i++){
+            obj.BoxTabla.addItem(obj.tablas.get(i));
+        }
+        obj.BoxTabla.setVisible(true);
+        constraints.gridy = 2;
+        obj.PanelTab.add(obj.BoxTabla,constraints);
+                   
+            
+        obj.BotonAceptarTab.setFont(new Font("arial",3,20));
+        obj.BotonAceptarTab.setBackground(new Color(27,180,233));
+        obj.BotonAceptarTab.setForeground(new Color(0,0,0));
+        obj.BotonAceptarTab.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        obj.BotonAceptarTab.setFocusPainted(false);
+        obj.BotonAceptarTab.removeActionListener(evt);
+        obj.BotonAceptarTab.addActionListener(evt);
+        constraints.gridy = 3;
+        obj.PanelTab.add(obj.BotonAceptarTab,constraints);
+        
+        
+        obj.ventanaTab.setVisible(true);
     }
-
+    
+    
+    // CREAMOS LAS FUNCIONES QUE ACTUALIZAN LA TABLA Y CONCEDE PERMISOS
+    public void ReiniciarTabla(String t){
+            obj.tabla=new DefaultTableModel();
+            obj.TablaVisual.setModel(new DefaultTableModel());
+            if(t!=null && !t.equals("")){
+                InfoTabla(t);
+            }
+                    
+  }  
+    
     public void InfoTabla(String t) {
         obj.NombreColumnas.clear();
         obj.TipoColumnas.clear();
@@ -390,13 +354,51 @@ public class MotorInterfaz {
                     JOptionPane.showMessageDialog(null, "Debido a un eror se cerrara el programa"+ex);
                     System.exit(0);
                 }
+        obj.TablaVisual.setModel(obj.tabla);
+        HabilitarBotones(t);
   }
     
-    public void ReiniciarTabla(){
-            obj.tabla=new DefaultTableModel();
-            obj.TablaVisual.setModel(new DefaultTableModel());
-  }  
+    // FUNCIÓN QUE HABILITA LOS BOTONES BASADO EN LOS PERMISOS D QUIEN INGRESA
+    public void HabilitarBotones(String a){
+        obj.insertar.setEnabled(false);
+        obj.eliminar.setEnabled(false);
+        obj.actualizar.setEnabled(false);
+        ArrayList<String> permisos = new ArrayList<> ();
+        Connection con=conectar.conect(obj.usuario,obj.contra);
+            ResultSet rs;
+             try {
+               PreparedStatement st = con.prepareStatement ("select privilege_type from information_schema.table_privileges where table_name = ? and grantee = ?");
+               st.setString (1, a);
+               st.setString (2, "'"+obj.usuario+"'@'localhost'");
 
+               // Ejecutar la consulta y obtener el resultado
+               rs = st.executeQuery ();
+
+               // Recorrer el ResultSet y mostrar los permisos
+               while (rs.next ()) {
+                 permisos.add(rs.getString ("privilege_type"));
+               }
+               rs.close();
+                st.close(); 
+                con.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Debido a un eror se cerrara el programa"+ex);
+                System.exit(0);
+            }
+            if(permisos.indexOf("INSERT")>=0){
+                obj.insertar.setEnabled(true);       
+            } 
+            if(permisos.indexOf("UPDATE")>=0){
+                obj.actualizar.setEnabled(true);
+            } 
+            if(permisos.indexOf("DELETE")>=0){
+                obj.eliminar.setEnabled(true);
+            }
+            }
+    
+    
+    
+    // CREAMOS LA PANTALLA PARA LA INSERCIÓN DE DATOS
     public void pantallaInsertar() {
         int col=obj.tabla.getColumnCount();
         obj.ventanaInsert.setSize(600, 100*col+100);
@@ -441,7 +443,7 @@ public class MotorInterfaz {
     }
     
     
-    
+    // CREAMOS LA PANTALLA PARA LA ACTUALIZACIÓN DE DATOS
     public void pantallaActualiza() {
         obj.ventanaAct.setSize(600, 600);
         obj.ventanaAct.getContentPane().setBackground(null);
@@ -510,41 +512,4 @@ public class MotorInterfaz {
         
     }
     
-    
-    public void pantallaMenu(){
-        
-        obj.drawer.header(new JLabel("Bienvenido "+obj.usuario));
-        
-        obj.drawer.addChild(new DrawerItem("Elimina fila").icon(obj.AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build());       
-        obj.drawer.addChild(new DrawerItem("Actualizar celda").icon(obj.AjustarImg("/Imagenes/actualizar.png", 30, 30)).build());       
-        obj.drawer.addChild(new DrawerItem("Insertar fila").icon(obj.AjustarImg("/Imagenes/insertar.png", 30, 30)).build());       
-        obj.drawer.build();
-        
-        obj.ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        obj.ventana.setLocationRelativeTo(null);
-        
-        obj.PanelTabla.setBackground(new Color(173,216,230));
-        obj.PanelTabla.setLayout(new GridBagLayout());
-        
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
-        constraints.gridx = 0; // La posición x del componente
-        constraints.gridy = 0; // La posición y del componente
-        constraints.anchor = GridBagConstraints.FIRST_LINE_START;
-        
-        
-        obj.btnPanel.setSize(100,100);
-        obj.btnPanel.setFont(new Font("arial",3,10));
-        obj.btnPanel.setBackground(new Color(27,180,233));
-        obj.btnPanel.setForeground(new Color(0,0,0));
-        obj.btnPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        obj.btnPanel.setFocusPainted(false);
-        obj.btnPanel.removeActionListener(evt);
-        obj.btnPanel.addActionListener(evt);
-        obj.PanelTabla.add(obj.btnPanel,constraints);
-        
-        obj.ventana.add(obj.PanelTabla,BorderLayout.CENTER);
-        obj.ventana.setVisible(true);
-    
-    }
 }
