@@ -16,9 +16,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -26,7 +24,10 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-
+import javaswingdev.drawer.Drawer;
+import javaswingdev.drawer.DrawerController;
+import javaswingdev.drawer.DrawerItem;
+import javax.swing.ImageIcon;
 
 public class MotorInterfaz {
     // RELACION ENTRE CLASES 
@@ -50,7 +51,8 @@ public class MotorInterfaz {
          MotorInterfaz mi=new MotorInterfaz();
     }
 
-    public MotorInterfaz(){PrimeraPantallaIngreso();
+    public MotorInterfaz(){
+        PrimeraPantallaIngreso();
         CreacionVentana();
         
     }
@@ -130,7 +132,10 @@ public class MotorInterfaz {
         obj.Títulobd.setBorder(null);
         obj.Títulobd.setBackground(null);
         obj.Títulobd.setVisible(true);
-        obj.AjustarImg("/Imagenes/LogotipoSinFondo.png", obj.Títulobd);
+        int w=obj.Títulobd.getWidth();
+        int h=obj.Títulobd.getHeight();
+        ImageIcon ic=obj.AjustarImg("/Imagenes/LogotipoSinFondo.png", w,h);
+        obj.Títulobd.setIcon(ic);
         obj.PanelIngreso.add(obj.Títulobd);
 
         
@@ -324,7 +329,6 @@ public class MotorInterfaz {
         obj.BotonActualizarFila.removeActionListener(evt);
         obj.BotonActualizarFila.addActionListener(evt);
         
-        
     }
     
     public void MostrarTabla(){
@@ -501,5 +505,28 @@ public class MotorInterfaz {
     }
     
     
+    public void pantallaMenu(){
+        
+        
+        obj.drawer.header(new JLabel("Bienvenido "+obj.usuario));
+        
+        obj.drawer.addChild(new DrawerItem("Elimina fila").icon(obj.AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build());       
+        obj.drawer.addChild(new DrawerItem("Actualizar celda").icon(obj.AjustarImg("/Imagenes/actualizar.png", 30, 30)).build());       
+        obj.drawer.addChild(new DrawerItem("Insertar fila").icon(obj.AjustarImg("/Imagenes/insertar.png", 30, 30)).build());       
+        obj.drawer.build();
+        
+        
+        
+        
+        obj.btnPanel.setBounds(0,0,50,50);
+        obj.btnPanel.setFont(new Font("arial",3,10));
+        obj.btnPanel.setBackground(new Color(27,180,233));
+        obj.btnPanel.setForeground(new Color(0,0,0));
+        obj.btnPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        obj.btnPanel.setFocusPainted(false);
+        obj.btnPanel.removeActionListener(evt);
+        obj.btnPanel.addActionListener(evt);
+        obj.ventana.add(obj.btnPanel);
     
+    }
 }

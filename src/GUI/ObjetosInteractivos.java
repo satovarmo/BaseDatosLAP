@@ -4,6 +4,7 @@ package GUI;
 
 import java.awt.Image;
 import java.util.ArrayList;
+import javaswingdev.drawer.Drawer;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -26,14 +27,11 @@ public class ObjetosInteractivos {
     }
     // GUARDAMOS LA INFORMACION DEL USUARIO
         
-public void AjustarImg(String Rutimg, JLabel J){
-    int w=J.getBounds().width;
-    int h=J.getBounds().height;
+public ImageIcon AjustarImg(String Rutimg, int w, int h){
     Image logotipo = new ImageIcon(getClass().getResource(   Rutimg)).getImage();
-    Image imgEscalada = logotipo.getScaledInstance(w, h, Image.SCALE_DEFAULT);
+    Image imgEscalada = logotipo.getScaledInstance(w, h, Image.SCALE_SMOOTH);
     ImageIcon icono = new ImageIcon(imgEscalada);
-// Asignar el icono al JLabel
-    J.setIcon(icono);
+    return icono;
 }
     public String usuario;
     public String contra;
@@ -92,13 +90,17 @@ public void AjustarImg(String Rutimg, JLabel J){
     public JTextField TextAct;
     public JButton BotonAceptarFila=new JButton("Actualizar celda");
     
+    
+    
+    
+    public JButton btnPanel=new JButton("|||");
+    public Drawer drawer=Drawer.newDrawer(ventana);
     //PANTALLA INSTRUCCIONES 
     /* public JFrame ventanaIns=new JFrame();
     public JTextArea TextIns=new JTextArea(),TitIns=new JTextArea();
     public JScrollPane ScrollIns=new JScrollPane(TextIns);
     public JButton AceptarIns=new JButton("Aceptar");
     public JPanel PanelIns=new JPanel();
-    
     
     //SEGUNDA PANTALLA (INGRESO DATOS DE JUGADORES)
     public JLabel TextIngNombre=new JLabel(),TextIngColor=new JLabel(),TextIngGrafo=new JLabel();

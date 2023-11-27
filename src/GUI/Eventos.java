@@ -52,7 +52,10 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
                         JOptionPane.showMessageDialog(null, "Debido a un eror se cerrara el programa"+ex);
                         System.exit(0);
                     }
-                    motint.seleccionTabla();
+                    motint.obj.ventana.remove(motint.obj.PanelIngreso);
+                    motint.obj.ventana.revalidate();
+                    motint.obj.ventana.repaint();
+                    motint.pantallaMenu();
                     motint.obj.ventana.revalidate();
                     motint.obj.ventana.repaint();
                 }
@@ -231,10 +234,6 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
                 JOptionPane.showMessageDialog(null,"No has seleccionado ninguna fila para ver");
             }
         }
-        
-        
-        
-        
         else if(e.getSource()==motint.obj.BotonAceptarFila){
             if (!motint.obj.TextAct.getText().equals("Ingresa el dato")){
                 PreparedStatement ps;
@@ -287,6 +286,13 @@ public class Eventos implements ActionListener, FocusListener, MouseListener{
             column=motint.obj.TablaVisual.getSelectedColumn();
             fila=motint.obj.TablaVisual.getSelectedRow();
             motint.pantallaActualiza();
+        }
+        else if(e.getSource()==motint.obj.btnPanel){
+            if(motint.obj.drawer.isShow()){
+                motint.obj.drawer.hide();
+            }else{
+                motint.obj.drawer.show();
+            }
         }
     }
     @Override
