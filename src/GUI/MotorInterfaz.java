@@ -12,6 +12,8 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -71,6 +73,7 @@ public class MotorInterfaz {
     // CREAMOS EL CODIGO PARA LA PRIMERA PANTALLA QUE VERÁ EL USUARIO
     
     public void PrimeraPantallaIngreso(){
+        obj.ventana.setResizable(true);
         obj.PanelIngreso.removeAll();
         obj.ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
         obj.ventana.add(obj.PanelIngreso, BorderLayout.CENTER);
@@ -156,7 +159,7 @@ public class MotorInterfaz {
     
     // CREAMOS EL CODIGO PARA LA SEGUNDA PANTALLA, DONDE TIENE ACCESO A LAS TABLAS Y VISTAS, Y A SUS CORRESPONDIENTES PERMISOS
     public void pantallaMenu(){
-        
+        obj.ventana.setResizable(false);
         JScrollPane scrollPane = new JScrollPane (obj.TablaVisual);
         
         
@@ -186,15 +189,19 @@ public class MotorInterfaz {
         
         
         
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.weightx = 1; // El espacio extra se distribuye al componente
+        constraints.weighty = 1; // El espacio extra se distribuye al componente
         constraints.gridx = 1; // La posición x del componente
         
         
         
-        obj.TituloTabla.setFont(new Font("arial",1,20));
+        obj.TituloTabla.setFont(new Font("arial",1,50));
         obj.TituloTabla.setText(((String) obj.BoxTabla.getSelectedItem()).toUpperCase());
         obj.TituloTabla.setBorder(null);
         obj.TituloTabla.setBackground(null);
         obj.TituloTabla.setForeground(new Color(31,73,155));
+        obj.TituloTabla.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         obj.TituloTabla.setVisible(true);
         obj.TituloTabla.removeMouseListener(evt);
         obj.TituloTabla.addMouseListener(evt);
@@ -207,12 +214,14 @@ public class MotorInterfaz {
         obj.TablaVisual.setRowHeight (50);
         obj.TablaVisual.setRowSelectionAllowed(true);
         obj.TablaVisual.setColumnSelectionAllowed(true);
-        constraints.gridy = 3; // La posición y del componente
+        obj.TablaVisual.removeMouseListener(evt);
+        obj.TablaVisual.addMouseListener(evt);
+        constraints.gridy = 4; // La posición y del componente
         obj.PanelTabla.add(scrollPane,constraints);
         
         
         
-        constraints.gridy = 4; // La posición y del componente
+        constraints.gridy = 3; // La posición y del componente
         obj.header=new JTableHeader();
         obj.header=obj.TablaVisual.getTableHeader();
         obj.header.setFont(new Font("arial",3,25));
@@ -231,6 +240,8 @@ public class MotorInterfaz {
     
     // CREAMOS LA PANTALLA PARA LA ELECCIÓN DE TABLAS
     void ElegirTabla() {
+        
+        obj.ventanaTab.setIconImage(obj.logo.getImage());
         obj.ventanaTab.setSize(450, 700);
         obj.ventanaTab.getContentPane().setBackground(null);
         obj.ventanaTab.setResizable(false);

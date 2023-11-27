@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import LAP.conectar;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -18,7 +19,7 @@ import java.sql.PreparedStatement;
 import javaswingdev.drawer.DrawerItem;
 import javaswingdev.drawer.EventDrawer;
 
-public class Eventos implements EventDrawer,ActionListener, FocusListener, MouseListener{
+public class Eventos extends MouseAdapter implements EventDrawer,ActionListener, FocusListener, MouseListener{
     MotorInterfaz motint;
     public Eventos(MotorInterfaz motint){
         this.motint=motint;
@@ -224,18 +225,10 @@ public class Eventos implements EventDrawer,ActionListener, FocusListener, Mouse
     @Override
     public void mouseClicked(MouseEvent e) {
          if(e.getSource()==motint.obj.TituloTabla && e.getClickCount()==2){
-             String text=((String) motint.obj.TituloTabla.getText());
-                if(text==null || text.equals("")){
-                    motint.obj.insertar.setEnabled(false);
-                    motint.obj.eliminar.setEnabled(false);
-                    motint.obj.actualizar.setEnabled(false);
-                }else{
-                    motint.ReiniciarTabla(text);
-                    motint.obj.ventana.revalidate();
-                    motint.obj.ventana.repaint();
-                }
+            motint.obj.ventana.setVisible(false);
+            motint.ElegirTabla();
          }
-         else{
+         else if(e.getSource()==motint.obj.TablaVisual && e.getClickCount()==2){
          if(motint.obj.TablaVisual.getSelectedRow()>=0){
                 String text=motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), motint.obj.TablaVisual.getSelectedColumn()).toString();
                 int fila=motint.obj.TablaVisual.getSelectedRow()+1;
@@ -247,26 +240,6 @@ public class Eventos implements EventDrawer,ActionListener, FocusListener, Mouse
          }
     }
     
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 
     @Override
     public void selected(int j, DrawerItem di) {
