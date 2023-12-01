@@ -166,7 +166,6 @@ public class MotorInterfaz {
         obj.Encabezado.setBackground(new Color(173,216,230));
         
         GridBagConstraints constraintsEnc = new GridBagConstraints();
-        constraintsEnc.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
         constraintsEnc.weightx = 1; // El espacio extra se distribuye al componente
         constraintsEnc.weighty = 0; // El espacio extra se distribuye al componente
         constraintsEnc.anchor = GridBagConstraints.CENTER;
@@ -182,7 +181,7 @@ public class MotorInterfaz {
         obj.Encabezado.add(labelEnc, constraintsEnc);
                 
         JLabel bienv=new JLabel("Bienvenido "+obj.usuario);
-        bienv.setFont(new Font("arial",3,20));
+        bienv.setFont(new Font("arial",3,18));
         constraintsEnc.gridy = 1; // La posición y del componente
         obj.Encabezado.add(bienv, constraintsEnc);
         
@@ -379,6 +378,7 @@ public class MotorInterfaz {
         obj.NombreColumnas.clear();
         obj.TipoColumnas.clear();
         obj.LlaveColumnas.clear();
+        obj.NullColumnas.clear();
         ResultSet rs;
         try{
             Connection con=conectar.conect(obj.usuario,obj.contra);
@@ -391,6 +391,7 @@ public class MotorInterfaz {
                 obj.NombreColumnas.add(rs.getString ("field"));
                 obj.TipoColumnas.add(rs.getString ("type"));
                 obj.LlaveColumnas.add(rs.getString ("key"));
+                obj.NullColumnas.add(rs.getString ("null"));
             }
             rs.close();
             ps.close();
@@ -522,7 +523,7 @@ public class MotorInterfaz {
         obj.ventanaAct.setLayout(null);
         obj.ventanaAct.setVisible(true);
         obj.ventanaAct.setLocationRelativeTo(null);
-        obj.ventanaAct.setTitle("Insertar Datos");
+        obj.ventanaAct.setTitle("Actualizar Datos");
         obj.ventanaAct.add(obj.PanelAct);
         
         
@@ -541,6 +542,8 @@ public class MotorInterfaz {
         obj.TextAct.setForeground(Color.gray);
         obj.TextAct.removeFocusListener(evt);
         obj.TextAct.addFocusListener(evt);
+        obj.TextAct.removeActionListener(evt);
+        obj.TextAct.addActionListener(evt);
         obj.TextAct.setVisible(true);
         obj.PanelAct.add(obj.TextAct);
             
@@ -627,22 +630,25 @@ public class MotorInterfaz {
 
     public void tipoPS(int i, PreparedStatement ps, String get, String j){
         try{
-                
-        switch(get.toLowerCase()){
-            case "int":
-                int k=Integer.parseInt(j);
-                ps.setInt(i, k);
-                break;
-            case "long":
-                long m=Long.parseLong(j);
-                ps.setLong(i, m);
-                break;
-            case "bigint":
-                double n=Double.parseDouble(j);
-                ps.setDouble(i, n);
-                break;
-            case "varchar(45)":
-                ps.setString(i, j);
+        if(obj.NullColumnas.get(i-1).equals("YES") && obj.listText[i-1].getText().equals("null")){
+            ps.setNull(i, i);
+        }else{       
+            switch(get.toLowerCase()){
+                case "int":
+                    int k=Integer.parseInt(j);
+                    ps.setInt(i, k);
+                    break;
+                case "long":
+                    long m=Long.parseLong(j);
+                    ps.setLong(i, m);
+                    break;
+                case "bigint":
+                    double n=Double.parseDouble(j);
+                    ps.setDouble(i, n);
+                    break;
+                case "varchar(45)":
+                    ps.setString(i, j);
+            }        
         }
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, "Error de conexión:" + e.getMessage());
@@ -650,6 +656,6 @@ public class MotorInterfaz {
         
     }
 
-   
+    
     
 }

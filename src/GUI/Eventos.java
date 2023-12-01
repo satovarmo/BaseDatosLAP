@@ -28,6 +28,9 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
     public int fila=0;
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+        // BOTON DE INICIAR SESIÓN
+                
         if(e.getSource()==motint.obj.BotonAceptar || e.getSource()==motint.obj.TextContraseña){
             motint.obj.usuario=(String) motint.obj.TipoUsuario.getSelectedItem();
             motint.obj.contra=motint.obj.TextContraseña.getText();
@@ -61,6 +64,9 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 }
             }
         }
+        
+        // PERMITIR INGRESAR CONTRASEÑA SEGÚN EL USUSARIO
+                
         else if(e.getSource()==motint.obj.TipoUsuario){
                String text=((String) motint.obj.TipoUsuario.getSelectedItem());
                if(text!=null){
@@ -82,6 +88,8 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                }
         }
         
+        // BOTON DE ACEPTAR LA TABLA E LA PANTALLA DE ELECCIÓN TABLA                
+        
         else if(e.getSource()==motint.obj.BotonAceptarTab){
                String text=((String) motint.obj.BoxTabla.getSelectedItem());
                 if(text==null || text.equals("")){
@@ -95,6 +103,9 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                     motint.obj.ventana.repaint();
                 }
         }
+        
+        // BOTON DE CERRAR SESIÓN
+                
         else if(e.getSource()==motint.obj.BotonCerrar){
             motint.obj.ventanaTab.dispose();
             motint.obj.usuario="";
@@ -108,15 +119,16 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
             motint.obj.ventana.repaint();
             
         }
+        
+        // BOTON ACEPTAR INSERTAR FILA                
+        
         else if(e.getSource()==motint.obj.BotonInsertarFila){
         int n=motint.obj.NombreColumnas.size();
-            boolean comprobacion=true;
             for (int i=0;i<n;i++){
                 if(motint.obj.listText[i].getText().equals("Ingresa "+motint.obj.NombreColumnas.get(i)) || motint.obj.listText[i].getText().equals("")){
-                    motint.obj.listText[i].setText("");
+                    motint.obj.listText[i].setText("null");
                 }
             }
-            if (comprobacion){
                 PreparedStatement ps;
                 String sql;
                 try{
@@ -133,25 +145,34 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                     ps.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Se han insertado los datos");
                 }catch(SQLException ex){
-                    JOptionPane.showMessageDialog(null, "Error de conexión:" + ex.getMessage());
+                    JOptionPane.showMessageDialog(null, "Error de conexión: " + ex.getMessage());
                 }
                 motint.obj.ventanaInsert.dispose();
                 String text=((String) motint.obj.BoxTabla.getSelectedItem());
                 motint.ReiniciarTabla(text);
-            }else{
-                JOptionPane.showMessageDialog(null, "Rellene los campos completamente");
-            } 
+            
         }
         
-        else if(e.getSource()==motint.obj.BotonAceptarFila){
+        // BOTON PARA ACEPTAR LOS DATOS DE ACTUALIZACIÓN
+        
+        else if(e.getSource()==motint.obj.BotonAceptarFila || e.getSource()==motint.obj.TextAct){
             if (!motint.obj.TextAct.getText().equals("Ingresa el dato")){
                 PreparedStatement ps;
                 String sql;
                 try{
                     Connection con = conectar.conect(motint.obj.usuario,motint.obj.contra);
                     String text="";
-                for(int i=0;i<motint.obj.TablaVisual.getColumnCount();i++){
+                int n=motint.obj.TablaVisual.getColumnCount();    
+                for(int i=0;i<n;i++){
                     if(i==motint.obj.TablaVisual.getSelectedColumn() || motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), i)==null){
+                        if(i==n-1){
+                            StringBuilder textP=new StringBuilder();
+                            for(int k=0;k<text.length()-5;k++){
+                                textP.append(text.charAt(k));
+                            }
+                            text=textP.toString();
+                            n=n-1;
+                        }
                         continue;
                     }
                 String c=motint.obj.TipoColumnas.get(i);
@@ -169,13 +190,14 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                         text=text+"`"+(motint.obj.NombreColumnas.get(i))+"` = '"+motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), i).toString()+"'";
                         break;
                 }
-                        if(i!=motint.obj.NombreColumnas.size()-1){
+                        if(i!=n-1){
                             text=text+" AND ";
                         }
                       
                 }    
                     sql = "UPDATE "+motint.obj.BoxTabla.getSelectedItem().toString()+" SET `"+motint.obj.NombreColumnas.get(column)+"` = ? WHERE "+text;
                     ps = con.prepareStatement(sql);
+                    System.out.println(sql);
                     motint.tipoPS(1,ps,motint.obj.TipoColumnas.get(column),motint.obj.TextAct.getText());
                     ps.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Se han actualizado los datos");
@@ -188,7 +210,10 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
             }else{
                 JOptionPane.showMessageDialog(null, "Inserte los datos");
             } 
-        }   
+        }
+        
+        // MENÚ
+           
         else if(e.getSource()==motint.obj.btnPanel){
             if(motint.obj.drawer.isShow()){
                 motint.obj.drawer.hide();
@@ -196,6 +221,10 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 motint.obj.drawer.show();
             }
         }
+        
+        
+        // BOTON NUEVA CONTRASEÑA
+        
         else  if(e.getSource()==motint.obj.BotonAceptarCont || e.getSource()==motint.obj.TextCont){
             if (!motint.obj.TextCont.getText().equals("Nueva contraseña") && !motint.obj.TextCont.getText().equals(motint.obj.contra)){
                 motint.cambiarCont(motint.obj.TextCont.getText());
@@ -300,8 +329,20 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
         else if(di==motint.obj.eliminar){
             if(motint.obj.TablaVisual.getSelectedRow()>=0){
                 Object[] col=new Object[motint.obj.TablaVisual.getColumnCount()];
+                int n=col.length;
                 String text="";
-                for(int i=0;i<motint.obj.TablaVisual.getColumnCount();i++){
+                for(int i=0;i<n;i++){
+                    if(motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), i)==null){
+                        if(i==n-1){
+                            StringBuilder textP=new StringBuilder();
+                            for(int k=0;k<text.length()-5;k++){
+                                textP.append(text.charAt(k));
+                            }
+                            text=textP.toString();
+                            n=n-1;
+                        }
+                        continue;
+                    }
                 String c=motint.obj.TipoColumnas.get(i);
                 switch(c){
                     case "int":
@@ -317,7 +358,7 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                         text=text+"`"+(motint.obj.NombreColumnas.get(i))+"` = '"+motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), i).toString()+"'";
                         break;
                 }
-                        if(i!=col.length-1){
+                        if(i!=n-1){
                             text=text+" AND ";
                         }
                       
@@ -327,6 +368,7 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 try{
                     Connection con = conectar.conect(motint.obj.usuario,motint.obj.contra);
                     sql = "delete from "+motint.obj.BoxTabla.getSelectedItem().toString()+" where ("+text+")";
+                    System.out.println(sql);
                     ps = con.prepareStatement(sql);
                     ps.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Se han eliminado los datos");

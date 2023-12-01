@@ -32,6 +32,7 @@ public class ObjetosInteractivos {
     // GUARDAMOS LA INFORMACION DEL USUARIO
 public void ConstructorMenu(){
         drawer.header(Encabezado);
+        drawer.space(15);
         drawer.addChild(eliminar);
         drawer.space(5);
         drawer.addChild(actualizar);
@@ -44,7 +45,7 @@ public void ConstructorMenu(){
 
 public void ConstructorDescripciones(){
     descripciones.put("cancha","Se muestra la información de cada una de las canchas disponibles para el club.");
-    descripciones.put("clase","La información de cada clase, su horario, fecha, entrenador asignado, caddi y cancha.");
+    descripciones.put("clase","La información de cada clase, su horario, fecha, entrenador asignado, caddie y cancha.");
     descripciones.put("objeto","Aquí está la información de los objetos, es decir de los artículos que vende el club y de los recursos que necesita, incluyendo la cantidad que se posee.");
     descripciones.put("personaclub","Se muestra la información de todas las personas asociadas al club, entrenadores, estudiantes, acudientes, afiliados, etc.");
     descripciones.put("tienda","En esta tabla esta la información de los proveedores del club.");
@@ -86,6 +87,7 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     ArrayList<String> NombreColumnas = new ArrayList<String> ();
     ArrayList<String> TipoColumnas = new ArrayList<String> ();
     ArrayList<String> LlaveColumnas = new ArrayList<String> ();
+    ArrayList<String> NullColumnas = new ArrayList<String> ();
     DefaultTableModel tabla =  new DefaultTableModel();
     JTableHeader header = new JTableHeader();
     
@@ -141,7 +143,7 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     public JFrame ventanaInsert=new JFrame();
     public JPanel PanelInsert=new JPanel();
     public JTextField[] listText;
-    public JButton BotonInsertarFila=new JButton("Insertar Fila");
+    public JButton BotonInsertarFila=new JButton("Insertar");
     
     
     
@@ -149,7 +151,7 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     public JFrame ventanaAct=new JFrame();
     public JPanel PanelAct=new JPanel();
     public JTextField TextAct;
-    public JButton BotonAceptarFila=new JButton("Actualizar celda");
+    public JButton BotonAceptarFila=new JButton("Actualizar");
     
     
     
