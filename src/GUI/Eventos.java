@@ -36,6 +36,7 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
             }if(motint.obj.usuario.equals("Elige tu usuario") || motint.obj.contra.equals("Ingresa tu contraseña")){
                 JOptionPane.showMessageDialog(null, "Elige un usuario e ingresa una contraseña");
             }else{
+                motint.obj.tablas.removeAll(motint.obj.tablas);
                 Connection con=conectar.conect(motint.obj.usuario,motint.obj.contra);
                 if(con==null){
                     JOptionPane.showMessageDialog(null, "El usuario y la contraseña no coinciden");
@@ -94,12 +95,25 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                     motint.obj.ventana.repaint();
                 }
         }
+        else if(e.getSource()==motint.obj.BotonCerrar){
+            motint.obj.ventanaTab.dispose();
+            motint.obj.usuario="";
+            motint.obj.contra="";
+            motint.obj.tablas.clear();
+            motint.ReiniciarTabla("");
+            motint.obj.ventana.remove(motint.obj.PanelTabla);
+            motint.obj.drawer.hide();
+            motint.PrimeraPantallaIngreso();
+            motint.obj.ventana.revalidate();
+            motint.obj.ventana.repaint();
+            
+        }
         else if(e.getSource()==motint.obj.BotonInsertarFila){
         int n=motint.obj.NombreColumnas.size();
             boolean comprobacion=true;
             for (int i=0;i<n;i++){
                 if(motint.obj.listText[i].getText().equals("Ingresa "+motint.obj.NombreColumnas.get(i)) || motint.obj.listText[i].getText().equals("")){
-                    comprobacion=false;
+                    motint.obj.listText[i].setText("");
                 }
             }
             if (comprobacion){
@@ -137,6 +151,9 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                     Connection con = conectar.conect(motint.obj.usuario,motint.obj.contra);
                     String text="";
                 for(int i=0;i<motint.obj.TablaVisual.getColumnCount();i++){
+                    if(i==motint.obj.TablaVisual.getSelectedColumn() || motint.obj.TablaVisual.getValueAt(motint.obj.TablaVisual.getSelectedRow(), i)==null){
+                        continue;
+                    }
                 String c=motint.obj.TipoColumnas.get(i);
                 switch(c){
                     case "int":
@@ -172,15 +189,20 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 JOptionPane.showMessageDialog(null, "Inserte los datos");
             } 
         }   
-        
-        
-        
-        
         else if(e.getSource()==motint.obj.btnPanel){
             if(motint.obj.drawer.isShow()){
                 motint.obj.drawer.hide();
             }else{
                 motint.obj.drawer.show();
+            }
+        }
+        else  if(e.getSource()==motint.obj.BotonAceptarCont || e.getSource()==motint.obj.TextCont){
+            if (!motint.obj.TextCont.getText().equals("Nueva contraseña") && !motint.obj.TextCont.getText().equals(motint.obj.contra)){
+                motint.cambiarCont(motint.obj.TextCont.getText());
+                motint.obj.ventanaCont.dispose();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Inserte una NUEVA contraseña válida");
             }
         }
     }
@@ -190,12 +212,17 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 motint.obj.TextAct.setText("");
                 motint.obj.TextAct.setForeground(Color.black);
         }
-            if(e.getSource()==motint.obj.TextContraseña && motint.obj.TextContraseña.getText().equals("Ingresa tu contraseña")){
+        if(e.getSource()==motint.obj.TextContraseña && motint.obj.TextContraseña.getText().equals("Ingresa tu contraseña")){
                 motint.obj.TextContraseña.setEchoChar('\u25CF');
                 motint.obj.TextContraseña.setText("");
                 motint.obj.TextContraseña.setForeground(new Color(0,0,0));
         }
-            if(motint.obj.listText!=null){
+        if(e.getSource()==motint.obj.TextCont && motint.obj.TextCont.getText().equals("Nueva contraseña")){
+                motint.obj.TextCont.setEchoChar('\u25CF');
+                motint.obj.TextCont.setText("");
+                motint.obj.TextCont.setForeground(new Color(0,0,0));
+        }
+        if(motint.obj.listText!=null){
                 for(int i=0;i<motint.obj.tabla.getColumnCount();i++){
                     if(e.getSource()==motint.obj.listText[i] && motint.obj.listText[i].getText().equals("Ingresa "+motint.obj.NombreColumnas.get(i))){
                         motint.obj.listText[i].setText("");
@@ -214,7 +241,12 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 motint.obj.TextContraseña.setText("Ingresa tu contraseña");
                 motint.obj.TextContraseña.setForeground(Color.gray);
         }
-        if(motint.obj.listText!=null){
+       if(e.getSource()==motint.obj.TextCont && motint.obj.TextCont.getText().equals("")){
+                motint.obj.TextCont.setEchoChar((char)0);
+                motint.obj.TextCont.setText("Nueva contraseña");
+                motint.obj.TextCont.setForeground(Color.gray);
+        }
+       if(motint.obj.listText!=null){
             for(int i=0;i<motint.obj.tabla.getColumnCount();i++){
                     if(e.getSource()==motint.obj.listText[i] && motint.obj.listText[i].getText().equals("")){
                         motint.obj.listText[i].setText("Ingresa "+motint.obj.NombreColumnas.get(i));
@@ -240,6 +272,10 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 JOptionPane.showMessageDialog(null,"No has seleccionado ninguna celda para ver");
             }
          }
+        else if(e.getSource()==motint.obj.cambiarContraseña){
+            motint.ventanaCont();
+        }
+        
     }
     
 

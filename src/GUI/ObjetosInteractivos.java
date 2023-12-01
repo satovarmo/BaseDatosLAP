@@ -30,6 +30,7 @@ public class ObjetosInteractivos {
     }
     // GUARDAMOS LA INFORMACION DEL USUARIO
 public void ConstructorMenu(){
+        drawer.header(Encabezado);
         drawer.addChild(eliminar);
         drawer.space(5);
         drawer.addChild(actualizar);
@@ -78,13 +79,19 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     public JLabel TituloTabla=new JLabel();
     
     
+    public JPanel Encabezado=new JPanel();
+    public JLabel cambiarContraseña=new JLabel();
     
     public DrawerItem eliminar=new DrawerItem("Eliminar fila").icon(AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build();
     public DrawerItem actualizar=new DrawerItem("Actualizar celda").icon(AjustarImg("/Imagenes/actualizar.png", 30, 30)).build();
     public DrawerItem insertar=(new DrawerItem("Insertar fila").icon(AjustarImg("/Imagenes/insertar.png", 30, 30))).build();
     public DrawerItem CerrarSesión=(new DrawerItem("CERRAR SESIÓN").icon(AjustarImg("/Imagenes/insertar.png", 30, 30))).build();
     
-    
+    //PANTALLA PARA CAMBIO DE CONTRASEÑA
+    public JFrame ventanaCont=new JFrame();
+    public JPanel PanelCont=new JPanel();
+    public JPasswordField TextCont=new JPasswordField();
+    public JButton BotonAceptarCont=new JButton("Aceptar");
     
     
     
@@ -93,6 +100,7 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     public JPanel PanelTab=new JPanel();
     public JComboBox BoxTabla=new JComboBox();
     public JButton BotonAceptarTab=new JButton("Aceptar");
+    public JButton BotonCerrar=new JButton("Cerrar Sesión");
     
     
     //PANTALLA PARA INSERCIÓN

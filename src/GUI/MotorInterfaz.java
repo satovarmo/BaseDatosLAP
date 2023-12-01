@@ -12,6 +12,7 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
@@ -159,12 +160,41 @@ public class MotorInterfaz {
     
     // CREAMOS EL CODIGO PARA LA SEGUNDA PANTALLA, DONDE TIENE ACCESO A LAS TABLAS Y VISTAS, Y A SUS CORRESPONDIENTES PERMISOS
     public void pantallaMenu(){
-        obj.ventana.setResizable(false);
-        obj.ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
         JScrollPane scrollPane = new JScrollPane (obj.TablaVisual);
+        obj.Encabezado.removeAll();
+        obj.Encabezado.setLayout(new GridBagLayout());
+        obj.Encabezado.setBackground(new Color(173,216,230));
         
+        GridBagConstraints constraintsEnc = new GridBagConstraints();
+        constraintsEnc.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
+        constraintsEnc.weightx = 1; // El espacio extra se distribuye al componente
+        constraintsEnc.weighty = 1; // El espacio extra se distribuye al componente
+        constraintsEnc.gridx = 1;
+        constraintsEnc.anchor = GridBagConstraints.CENTER;
         
-        obj.drawer.header(new JLabel("Bienvenido "+obj.usuario));
+        JLabel labelEnc= new JLabel();
+        labelEnc.setBorder(null);
+        labelEnc.setBackground(null);
+        labelEnc.setVisible(true);
+        ImageIcon ic=obj.AjustarImg("/Imagenes/"+obj.usuario+"_icon.png", 100,100);
+        labelEnc.setIcon(ic);
+        constraintsEnc.gridy = 0; // La posición y del componente
+        obj.Encabezado.add(labelEnc, constraintsEnc);
+                
+        JLabel bienv=new JLabel("Bienvenido "+obj.usuario);
+        bienv.setFont(new Font("arial",3,15));
+        constraintsEnc.gridy = 1; // La posición y del componente
+        obj.Encabezado.add(bienv, constraintsEnc);
+        
+        if(!obj.usuario.equals("estudiante") && !obj.usuario.equals("acudiente") && !obj.usuario.equals("cliente")){
+            obj.cambiarContraseña.setText("Cambia tu contraseña");
+            obj.cambiarContraseña.setFont(new Font("arial",3,10));
+            obj.cambiarContraseña.removeMouseListener(evt);
+            obj.cambiarContraseña.addMouseListener(evt);
+            constraintsEnc.gridy = 2; // La posición y del componente
+            obj.Encabezado.add(obj.cambiarContraseña, constraintsEnc);
+        }
+        
         obj.drawer.build();
         
         obj.PanelTabla.setBackground(new Color(173,216,230));
@@ -271,7 +301,7 @@ public class MotorInterfaz {
         
         JLabel TextoEnt=new JLabel();
         TextoEnt.setFont(new Font("arial",1,20));
-        TextoEnt.setText("ELIGE TU TABLA");
+        TextoEnt.setText("ELIGE TU TABLA "+obj.usuario.toUpperCase());
         TextoEnt.setBorder(null);
         TextoEnt.setBackground(null);
         TextoEnt.setForeground(new Color(31,73,155));
@@ -294,8 +324,8 @@ public class MotorInterfaz {
                    
             
         obj.BotonAceptarTab.setFont(new Font("arial",3,20));
-        obj.BotonAceptarTab.setBackground(new Color(27,180,233));
-        obj.BotonAceptarTab.setForeground(new Color(0,0,0));
+        obj.BotonAceptarTab.setBackground(new Color(0,0,255));
+        obj.BotonAceptarTab.setForeground(new Color(255,255,255));
         obj.BotonAceptarTab.setCursor(new Cursor(Cursor.HAND_CURSOR));
         obj.BotonAceptarTab.setFocusPainted(false);
         obj.BotonAceptarTab.removeActionListener(evt);
@@ -303,6 +333,17 @@ public class MotorInterfaz {
         constraints.gridy = 3;
         obj.PanelTab.add(obj.BotonAceptarTab,constraints);
         
+        
+        
+        obj.BotonCerrar.setFont(new Font("arial",3,20));
+        obj.BotonCerrar.setBackground(new Color(238,11,28));
+        obj.BotonCerrar.setForeground(new Color(255,255,255));
+        obj.BotonCerrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        obj.BotonCerrar.setFocusPainted(false);
+        obj.BotonCerrar.removeActionListener(evt);
+        obj.BotonCerrar.addActionListener(evt);
+        constraints.gridy = 4;
+        obj.PanelTab.add(obj.BotonCerrar,constraints);
         
         obj.ventanaTab.setVisible(true);
     }
@@ -414,6 +455,7 @@ public class MotorInterfaz {
     public void pantallaInsertar() {
         int col=obj.tabla.getColumnCount();
         obj.ventanaInsert.setSize(600, 100*col+100);
+        obj.ventanaInsert.setIconImage(obj.logo.getImage());
         obj.ventanaInsert.getContentPane().setBackground(null);
         obj.ventanaInsert.setResizable(false);
         obj.ventanaInsert.setLayout(null);
@@ -460,6 +502,7 @@ public class MotorInterfaz {
         obj.ventanaAct.setSize(600, 600);
         obj.ventanaAct.getContentPane().setBackground(null);
         obj.ventanaAct.setResizable(false);
+        obj.ventanaAct.setIconImage(obj.logo.getImage());
         obj.ventanaAct.setLayout(null);
         obj.ventanaAct.setVisible(true);
         obj.ventanaAct.setLocationRelativeTo(null);
@@ -498,6 +541,73 @@ public class MotorInterfaz {
     }
     
     
+    //CREAMOS LA PANTALLA PARA CAMBIAR CONTRASEÑA
+     void ventanaCont() {
+        
+        obj.ventanaCont.setSize(600, 600);
+        obj.ventanaCont.getContentPane().setBackground(null);
+        obj.ventanaCont.setResizable(false);
+        obj.ventanaCont.setLayout(null);
+        obj.ventanaCont.setIconImage(obj.logo.getImage());
+        obj.ventanaCont.setVisible(true);
+        obj.ventanaCont.setLocationRelativeTo(null);
+        obj.ventanaCont.setTitle("Cambiar contraseña");
+        obj.ventanaCont.add(obj.PanelCont);
+        
+        
+        obj.PanelCont.removeAll();
+        obj.PanelCont.setBounds(0,0,600,600);
+        obj.PanelCont.setLayout(new GridBagLayout());
+        
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
+        constraints.gridx = 0; // La posición x del componente
+        constraints.gridy = 0; // La posición y del componente
+        constraints.weightx = 0; // El espacio extra se distribuye al componente
+        constraints.weighty = 1; // El espacio extra se distribuye al componente
+        constraints.anchor = GridBagConstraints.CENTER;
+        obj.PanelCont.setBackground(new Color(217,235,255));
+        
+        
+        obj.TextCont.setText("Nueva contraseña");
+        obj.TextCont.setEditable(true);
+        obj.TextCont.setFont(new Font("arial",0,12));
+        obj.TextCont.setForeground(Color.gray);
+        obj.TextCont.removeFocusListener(evt);
+        obj.TextCont.addFocusListener(evt);
+        obj.TextCont.removeActionListener(evt);
+        obj.TextCont.addActionListener(evt);
+        obj.TextCont.setVisible(true);
+        obj.PanelCont.add(obj.TextCont,constraints);
+        
+        
+        
+        obj.BotonAceptarCont.setFont(new Font("arial",3,20));
+        obj.BotonAceptarCont.setBackground(new Color(27,180,233));
+        obj.BotonAceptarCont.setForeground(new Color(0,0,0));
+        obj.BotonAceptarCont.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        obj.BotonAceptarCont.setFocusPainted(false);
+        obj.BotonAceptarCont.removeActionListener(evt);
+        obj.BotonAceptarCont.addActionListener(evt);
+        constraints.gridy=1;
+            obj.PanelCont.add(obj.BotonAceptarCont,constraints);
+    }
+    
+    
+    public void cambiarCont(String t){
+        try{
+            Connection con=conectar.conect(obj.usuario,obj.contra);
+            String sql = "set password for '"+obj.usuario+"'@'localhost'='"+t+"'";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.execute();
+            ps.close();
+            con.close();
+            JOptionPane.showMessageDialog(null, "Contraseña Cambiada con exito");
+        }catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Debido a un eror se cerrara el programa "+ex);
+                    System.exit(0);
+                }
+    }
 
     public void tipoPS(int i, PreparedStatement ps, String get, String j){
         try{
@@ -523,5 +633,7 @@ public class MotorInterfaz {
         }
         
     }
+
+   
     
 }
