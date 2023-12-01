@@ -4,9 +4,9 @@ package GUI;
 
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import javaswingdev.drawer.Drawer;
 import javaswingdev.drawer.DrawerItem;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -27,6 +27,7 @@ public class ObjetosInteractivos {
           
           this.motint=motint;
             ConstructorMenu();
+            ConstructorDescripciones();
     }
     // GUARDAMOS LA INFORMACION DEL USUARIO
 public void ConstructorMenu(){
@@ -39,7 +40,40 @@ public void ConstructorMenu(){
         drawer.space(5);
         drawer.addFooter(CerrarSesión);
         drawer.event(motint.evt);    
-}        
+}
+
+public void ConstructorDescripciones(){
+    descripciones.put("cancha","Se muestra la información de cada una de las canchas disponibles para el club.");
+    descripciones.put("clase","La información de cada clase, su horario, fecha, entrenador asignado, caddi y cancha.");
+    descripciones.put("objeto","Aquí está la información de los objetos, es decir de los artículos que vende el club y de los recursos que necesita, incluyendo la cantidad que se posee.");
+    descripciones.put("personaclub","Se muestra la información de todas las personas asociadas al club, entrenadores, estudiantes, acudientes, afiliados, etc.");
+    descripciones.put("tienda","En esta tabla esta la información de los proveedores del club.");
+    descripciones.put("articulos","Aquí está la información de los productos que vende el club, con el stock y su precio correspondiente.");
+    descripciones.put("caddie_recursos","Se muestra quién es el responsable, con nombre y apellido, de manejar cada recurso del que dispone el club.");
+    descripciones.put("objetos_baratos","Una tabla donde muestra con cual proveedor es más barato conseguir un objeto determinado.");
+    descripciones.put("recursos","Muestra los recursos de los que dispone el club, es decir los objetos necesarios para impartir clase.");
+    descripciones.put("clientes_club","La tabla muestra con nombre, los clientes que han comprado y se relacionan con el club, mostrando qué tipo de personaclub son.");
+    descripciones.put("cliente","Se ve la tabla sobre los clientes que han comprado en la tienda del club.");
+    descripciones.put("compras","En esta tabla se ve cuando un cliente ha comprado cierta cantidad de un artículo, con fecha incluida.");
+    descripciones.put("objetos_administrados","Se muestra la información, con ID, nombre y apellido de quién administra cada artículo.");
+    descripciones.put("acudiente_costo","Una tabla que muestra cuanto debe pagar cada acudiente con su respectivo número de cédula.");
+    descripciones.put("entrenadores","La tabla muestra el ID de cada entrenador con su nombre, apellido, etc.");
+    descripciones.put("clases_entrenadores","Se puede ver quién es el entrenador encargado de enseñar cada clase.");
+    descripciones.put("estudiante_costo","Estudiante costo muestra cuanto debe pagar cada estudiante y si tiene descuentos. Muestra el porcentaje al que equivalen.");
+    descripciones.put("caddie","Muestra el salario del caddie según su ID.");
+    descripciones.put("acudientes_estudiantes","Muestra el nombre, apellido, y contacto del acudiente de cada estudiante, en caso de emergencias.");
+    descripciones.put("lista_clase","Es la lista de asistencia de cada clase, separadas con el ID de la clase en cuestión.");
+    descripciones.put("entrenador","Muestra el ID de entrenadores con la información necesaria para su contratación.");
+    descripciones.put("administrativo","Visuzaliza el ID del administrativo con su cargo y horario.");
+    descripciones.put("acudiente","La tabla muestra el ID de cada acudiente con la cantidad de estudiantes a cargo.");
+    descripciones.put("afiliado","Se ve la información de cada afiliado al club.");
+    descripciones.put("carnet","La información de los carnets de cada afiliado.");
+    descripciones.put("descuento","La tabla de referencia para los descuentos que se hace a estudiantes según su situación.");
+    descripciones.put("estudiante","Información relevante para cuando se recibe a un nuevo estudiante.");
+    descripciones.put("estudiante_toma_clase","La tabla que muestra qué estudiantes han tomado o tomarán cierta clase.");
+
+}
+
 public ImageIcon AjustarImg(String Rutimg, int w, int h){
     Image logotipo = new ImageIcon(getClass().getResource(   Rutimg)).getImage();
     Image imgEscalada = logotipo.getScaledInstance(w, h, Image.SCALE_SMOOTH);
@@ -122,34 +156,6 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     
     public JButton btnPanel=new JButton("|||");
     public Drawer drawer=Drawer.newDrawer(ventana);
-    //PANTALLA INSTRUCCIONES 
-    /* public JFrame ventanaIns=new JFrame();
-    public JTextArea TextIns=new JTextArea(),TitIns=new JTextArea();
-    public JScrollPane ScrollIns=new JScrollPane(TextIns);
-    public JButton AceptarIns=new JButton("Aceptar");
-    public JPanel PanelIns=new JPanel();
     
-    //SEGUNDA PANTALLA (INGRESO DATOS DE JUGADORES)
-    public JLabel TextIngNombre=new JLabel(),TextIngColor=new JLabel(),TextIngGrafo=new JLabel();
-    public JTextField IngNombre=new JTextField();
-    public JColorChooser IngColor=new JColorChooser();
-    public JComboBox IngGraf=new JComboBox();
-    public JButton BtnReg=new JButton("Registrar"),BtnClr=new JButton("Color");
-    public JPanel PanelDibujo=new JPanel();
-    public Color PosibleColor;
-    
-    //PANTALLA COLOR 
-    public JFrame ventanaColor=new JFrame();
-    public JButton AceptarColor=new JButton("Aceptar");
-    public JPanel PanelColor=new JPanel(),Paleta=new JPanel();
-    
-    
-    //TERCERAPANTALLA (JUEGO)
-    public JLabel TurnoJug=new JLabel();
-    
-    //PANTALLA GANADOR
-    public JLabel TextGanador=new JLabel();
-    public JButton Salir=new JButton("Salir"),Volver=new JButton("Jugar de Nuevo");
-    
-    */
+    public Hashtable descripciones=new Hashtable();
 }

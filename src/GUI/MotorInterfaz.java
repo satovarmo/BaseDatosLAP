@@ -168,9 +168,9 @@ public class MotorInterfaz {
         GridBagConstraints constraintsEnc = new GridBagConstraints();
         constraintsEnc.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
         constraintsEnc.weightx = 1; // El espacio extra se distribuye al componente
-        constraintsEnc.weighty = 1; // El espacio extra se distribuye al componente
-        constraintsEnc.gridx = 1;
+        constraintsEnc.weighty = 0; // El espacio extra se distribuye al componente
         constraintsEnc.anchor = GridBagConstraints.CENTER;
+        constraintsEnc.gridx = 0;
         
         JLabel labelEnc= new JLabel();
         labelEnc.setBorder(null);
@@ -182,20 +182,23 @@ public class MotorInterfaz {
         obj.Encabezado.add(labelEnc, constraintsEnc);
                 
         JLabel bienv=new JLabel("Bienvenido "+obj.usuario);
-        bienv.setFont(new Font("arial",3,15));
+        bienv.setFont(new Font("arial",3,20));
         constraintsEnc.gridy = 1; // La posición y del componente
         obj.Encabezado.add(bienv, constraintsEnc);
         
         if(!obj.usuario.equals("estudiante") && !obj.usuario.equals("acudiente") && !obj.usuario.equals("cliente")){
             obj.cambiarContraseña.setText("Cambia tu contraseña");
-            obj.cambiarContraseña.setFont(new Font("arial",3,10));
+            obj.cambiarContraseña.setFont(new Font("arial",0,15));
             obj.cambiarContraseña.removeMouseListener(evt);
             obj.cambiarContraseña.addMouseListener(evt);
+            obj.cambiarContraseña.setCursor(new Cursor(Cursor.HAND_CURSOR));
             constraintsEnc.gridy = 2; // La posición y del componente
             obj.Encabezado.add(obj.cambiarContraseña, constraintsEnc);
         }
         
         obj.drawer.build();
+        
+        obj.PanelTabla.removeAll();
         
         obj.PanelTabla.setBackground(new Color(173,216,230));
         obj.PanelTabla.setLayout(new GridBagLayout());
@@ -240,6 +243,19 @@ public class MotorInterfaz {
         obj.PanelTabla.add(obj.TituloTabla,constraints);
         
         
+        JLabel Descrip=new JLabel();
+        Descrip.setFont(new Font("arial",0,20));
+        Descrip.setText((String) obj.descripciones.get( ((String) obj.BoxTabla.getSelectedItem()) ));
+        Descrip.setBorder(null);
+        Descrip.setBackground(null);
+        Descrip.setForeground(Color.black);
+        Descrip.setVisible(true);
+        constraints.gridy = 3;
+        obj.PanelTabla.add(Descrip,constraints);
+        
+        
+        
+        
         obj.TablaVisual.setFont(new Font("arial",0,18));
         obj.TablaVisual.setAutoResizeMode (JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
         obj.TablaVisual.setRowHeight (50);
@@ -247,12 +263,12 @@ public class MotorInterfaz {
         obj.TablaVisual.setColumnSelectionAllowed(true);
         obj.TablaVisual.removeMouseListener(evt);
         obj.TablaVisual.addMouseListener(evt);
-        constraints.gridy = 4; // La posición y del componente
+        constraints.gridy = 5; // La posición y del componente
         obj.PanelTabla.add(scrollPane,constraints);
         
         
         
-        constraints.gridy = 3; // La posición y del componente
+        constraints.gridy = 4; // La posición y del componente
         obj.header=new JTableHeader();
         obj.header=obj.TablaVisual.getTableHeader();
         obj.header.setFont(new Font("arial",3,25));
