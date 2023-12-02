@@ -4,7 +4,9 @@ package GUI;
 
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import javaswingdev.drawer.Drawer;
 import javaswingdev.drawer.DrawerItem;
 import javax.swing.ImageIcon;
@@ -38,6 +40,8 @@ public void ConstructorMenu(){
         drawer.addChild(actualizar);
         drawer.space(5);
         drawer.addChild(insertar);
+        drawer.space(5);
+        drawer.addChild(buscar);
         drawer.space(5);
         drawer.addFooter(CerrarSesión);
         drawer.event(motint.evt);    
@@ -89,6 +93,7 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     ArrayList<String> LlaveColumnas = new ArrayList<String> ();
     ArrayList<String> NullColumnas = new ArrayList<String> ();
     DefaultTableModel tabla =  new DefaultTableModel();
+    public Map<String, Integer> mapa = new HashMap<>();
     JTableHeader header = new JTableHeader();
     
     //PRIMERA PANTALLA 
@@ -121,7 +126,10 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     public DrawerItem eliminar=new DrawerItem("Eliminar fila").icon(AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build();
     public DrawerItem actualizar=new DrawerItem("Actualizar celda").icon(AjustarImg("/Imagenes/actualizar.png", 30, 30)).build();
     public DrawerItem insertar=(new DrawerItem("Insertar fila").icon(AjustarImg("/Imagenes/insertar.png", 30, 30))).build();
+    public DrawerItem buscar=(new DrawerItem("Buscar fila").icon(AjustarImg("/Imagenes/insertar.png", 30, 30))).build();
     public DrawerItem CerrarSesión=(new DrawerItem("CERRAR SESIÓN").icon(AjustarImg("/Imagenes/insertar.png", 30, 30))).build();
+    public DrawerItem calcularDescuentoEstudiante=(new DrawerItem("Calcular descuento").icon(AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build());
+    
     
     //PANTALLA PARA CAMBIO DE CONTRASEÑA
     public JFrame ventanaCont=new JFrame();
@@ -153,6 +161,11 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     public JTextField TextAct;
     public JButton BotonAceptarFila=new JButton("Actualizar");
     
+    //PANTALLA PARA buscar
+    public JFrame ventanaBus=new JFrame();
+    public JPanel PanelBus=new JPanel();
+    public JTextField TextBus;
+    public JButton BotonBuscarFila=new JButton("Buscar");
     
     
     

@@ -234,6 +234,29 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 JOptionPane.showMessageDialog(null, "Inserte una NUEVA contraseña válida");
             }
         }
+        
+        //BOTON BUSQUEDA
+        
+        
+        else if(e.getSource()==motint.obj.BotonBuscarFila|| e.getSource()==motint.obj.TextBus){
+            if (!motint.obj.TextBus.getText().equals("Ingresa el ID")){
+                String t=motint.obj.BoxTabla.getSelectedItem().toString();
+                switch(t){
+                    case "personaclub":
+                        motint.pro.BuscarPersona(Integer.parseInt(motint.obj.TextBus.getText()));
+                        break;
+                    case "estudiante_costo":
+                        motint.pro.BuscarEstudiante(Integer.parseInt(motint.obj.TextBus.getText()));
+                        break;
+                    case "entrenadores":
+                        motint.pro.BuscarEntrenador(Integer.parseInt(motint.obj.TextBus.getText()));
+                        break;
+                }
+                motint.obj.ventanaBus.dispose();
+            }else{
+                JOptionPane.showMessageDialog(null, "Inserte los datos");
+            }
+        }
     }
     @Override
     public void focusGained(FocusEvent e) {
@@ -251,6 +274,10 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 motint.obj.TextCont.setText("");
                 motint.obj.TextCont.setForeground(new Color(0,0,0));
         }
+        if(e.getSource()==motint.obj.TextBus && motint.obj.TextBus.getText().equals("Ingresa el ID")){
+                motint.obj.TextBus.setText("");
+                motint.obj.TextBus.setForeground(Color.black);
+        }
         if(motint.obj.listText!=null){
                 for(int i=0;i<motint.obj.tabla.getColumnCount();i++){
                     if(e.getSource()==motint.obj.listText[i] && motint.obj.listText[i].getText().equals("Ingresa "+motint.obj.NombreColumnas.get(i))){
@@ -264,6 +291,9 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
         if(e.getSource()==motint.obj.TextAct && motint.obj.TextAct.getText().equals("")){
                 motint.obj.TextAct.setText("Ingresa el dato");
                 motint.obj.TextAct.setForeground(Color.gray);
+        }if(e.getSource()==motint.obj.TextAct && motint.obj.TextAct.getText().equals("")){
+                motint.obj.TextAct.setText("Ingresa el dato");
+                motint.obj.TextAct.setForeground(Color.gray);
         }
         if(e.getSource()==motint.obj.TextContraseña && motint.obj.TextContraseña.getText().equals("")){
                 motint.obj.TextContraseña.setEchoChar((char)0);
@@ -274,6 +304,10 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 motint.obj.TextCont.setEchoChar((char)0);
                 motint.obj.TextCont.setText("Nueva contraseña");
                 motint.obj.TextCont.setForeground(Color.gray);
+        }
+        if(e.getSource()==motint.obj.TextBus && motint.obj.TextBus.getText().equals("")){
+                motint.obj.TextAct.setText("Ingresa el dato");
+                motint.obj.TextAct.setForeground(Color.gray);
         }
        if(motint.obj.listText!=null){
             for(int i=0;i<motint.obj.tabla.getColumnCount();i++){
@@ -324,6 +358,9 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
         
         else if(di==motint.obj.insertar){
             motint.pantallaInsertar();
+            if(motint.obj.drawer.isShow()){
+                motint.obj.drawer.hide();
+            }
         }   
         
         else if(di==motint.obj.eliminar){
@@ -387,6 +424,29 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 column=motint.obj.TablaVisual.getSelectedColumn();
                 fila=motint.obj.TablaVisual.getSelectedRow();
                 motint.pantallaActualiza();
+                if(motint.obj.drawer.isShow()){
+                    motint.obj.drawer.hide();
+            }
+                }
+             else{
+                 JOptionPane.showMessageDialog(null,"No has seleccionado ninguna casilla para actualizar");
+             }
+        }
+        else if(di==motint.obj.buscar){
+            motint.pantallaBusca();
+            if(motint.obj.drawer.isShow()){
+                motint.obj.drawer.hide();
+            }    
+            
+        }
+        else if(di==motint.obj.calcularDescuentoEstudiante){
+             if(motint.obj.TablaVisual.getSelectedRow()>=0){
+                column=motint.obj.TablaVisual.getSelectedColumn();
+                fila=motint.obj.TablaVisual.getSelectedRow();
+                motint.pro.calcularCosto();
+                if(motint.obj.drawer.isShow()){
+                    motint.obj.drawer.hide();
+            }
                 }
              else{
                  JOptionPane.showMessageDialog(null,"No has seleccionado ninguna casilla para actualizar");

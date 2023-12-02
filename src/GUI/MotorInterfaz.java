@@ -19,6 +19,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import javaswingdev.drawer.DrawerItem;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -36,6 +38,7 @@ public class MotorInterfaz {
     // RELACION ENTRE CLASES 
     Eventos evt=new Eventos(this);
     public ObjetosInteractivos obj=new ObjetosInteractivos(this);
+    public Procedimientos pro=new Procedimientos(this);
     
     //OBJETOS DE DATOS
     
@@ -194,7 +197,7 @@ public class MotorInterfaz {
             constraintsEnc.gridy = 2; // La posición y del componente
             obj.Encabezado.add(obj.cambiarContraseña, constraintsEnc);
         }
-        
+        AgregarDrawer();
         obj.drawer.build();
         
         obj.PanelTabla.removeAll();
@@ -379,12 +382,12 @@ public class MotorInterfaz {
         obj.TipoColumnas.clear();
         obj.LlaveColumnas.clear();
         obj.NullColumnas.clear();
+        obj.mapa.clear();
         ResultSet rs;
         try{
             Connection con=conectar.conect(obj.usuario,obj.contra);
             String sql = "DESCRIBE "+t;
             PreparedStatement ps = con.prepareStatement(sql);
-            java.sql.DatabaseMetaData dbmd;
             rs = ps.executeQuery();
             ArrayList<String> permisos = new ArrayList<> ();
             while (rs.next()) {
@@ -410,11 +413,14 @@ public class MotorInterfaz {
             PreparedStatement ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             String[] fila = new String[obj.TipoColumnas.size()];
+            int i=1;
             while (rs.next()) {
                 for(int j=0;j<obj.TipoColumnas.size();j++){
                     fila[j]=rs.getString (obj.NombreColumnas.get(j));
-                }
+                }   
+            obj.mapa.put(String.join("", fila), i);        
             obj.tabla.addRow(fila);
+            i=i+1;
             }
             rs.close();
             ps.close();
@@ -560,6 +566,63 @@ public class MotorInterfaz {
     }
     
     
+     // CREAMOS LA PANTALLA PARA LA BUSQUEDA DE DATOS
+    public void pantallaBusca() {
+        obj.ventanaBus.setSize(600, 600);
+        obj.ventanaBus.getContentPane().setBackground(null);
+        obj.ventanaBus.setResizable(false);
+        obj.ventanaBus.setIconImage(obj.logo.getImage());
+        obj.ventanaBus.setLayout(null);
+        obj.ventanaBus.setVisible(true);
+        obj.ventanaBus.setLocationRelativeTo(null);
+        obj.ventanaBus.setTitle("Busqueda de datos");
+        obj.ventanaBus.add(obj.PanelBus);
+        
+        
+        obj.PanelBus.removeAll();
+        obj.PanelBus.setBounds(0,0,600,600);
+        obj.PanelBus.setLayout(new GridBagLayout());
+        
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
+        constraints.gridx = 0; // La posición x del componente
+        constraints.gridy = 0; // La posición y del componente
+        constraints.weightx = 0; // El espacio extra se distribuye al componente
+        constraints.weighty = 1; // El espacio extra se distribuye al componente
+        constraints.anchor = GridBagConstraints.CENTER;
+        
+        
+        obj.PanelBus.setBackground(new Color(217,235,255));
+        
+        
+        
+        obj.TextBus=new JTextField();
+        obj.TextBus.setBounds(100,200,400,50);
+        obj.TextBus.setText("Ingresa el ID");
+        obj.TextBus.setEditable(true);
+        obj.TextBus.setFont(new Font("arial",0,12));
+        obj.TextBus.setForeground(Color.gray);
+        obj.TextBus.removeFocusListener(evt);
+        obj.TextBus.addFocusListener(evt);
+        obj.TextBus.removeActionListener(evt);
+        obj.TextBus.addActionListener(evt);
+        obj.TextBus.setVisible(true);
+        obj.PanelBus.add(obj.TextBus,constraints);
+            
+            
+        obj.BotonBuscarFila.setBounds(225,350,150,50);
+        obj.BotonBuscarFila.setFont(new Font("arial",3,20));
+        obj.BotonBuscarFila.setBackground(new Color(27,180,233));
+        obj.BotonBuscarFila.setForeground(new Color(0,0,0));
+        obj.BotonBuscarFila.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        obj.BotonBuscarFila.setFocusPainted(false);
+        obj.BotonBuscarFila.removeActionListener(evt);
+        obj.BotonBuscarFila.addActionListener(evt);
+        constraints.gridy = 1; // La posición y del componente
+            obj.PanelBus.add(obj.BotonBuscarFila,constraints);
+    }
+   
+    
     //CREAMOS LA PANTALLA PARA CAMBIAR CONTRASEÑA
      void ventanaCont() {
         
@@ -621,6 +684,7 @@ public class MotorInterfaz {
             ps.execute();
             ps.close();
             con.close();
+            obj.contra=t;
             JOptionPane.showMessageDialog(null, "Contraseña Cambiada con exito");
         }catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Debido a un eror se cerrara el programa "+ex);
@@ -656,6 +720,14 @@ public class MotorInterfaz {
         
     }
 
+    public void AgregarDrawer(){
+        String u=obj.BoxTabla.getSelectedItem().toString();
+        switch(u){
+            case "estudiante_costo":
+                    obj.drawer.addChild(obj.calcularDescuentoEstudiante);
+                    obj.drawer.space(5);
+        }
+    }
     
     
 }
