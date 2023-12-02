@@ -267,6 +267,15 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                     case "acudiente_costo":
                         motint.pro.BuscarAcuCos(Integer.parseInt(motint.obj.TextBus.getText()));
                         break;
+                    case "caddie":
+                        motint.pro.BuscarCad(Integer.parseInt(motint.obj.TextBus.getText()));
+                        break;
+                    case "acudientes_estudiantes":
+                        motint.pro.BuscarAcuEst(Integer.parseInt(motint.obj.TextBus.getText()));
+                        break;
+                    case "clase":
+                        motint.pro.BuscarClaseID(Integer.parseInt(motint.obj.TextBus.getText()));
+                        break;
                 }
                 motint.obj.ventanaBus.dispose();
             }else{
@@ -285,6 +294,26 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
             }
         }
         
+        // BTON BUSQUEDA NOMBRE
+        else if(e.getSource()==motint.obj.BotonBuscarCad ){
+            if (!motint.obj.TextBus.getText().equals("Ingresa el ID") ){
+                motint.pro.BuscarCadClas(Integer.parseInt(motint.obj.TextBus.getText()));
+                motint.obj.ventanaBus.dispose();
+            }else{
+                JOptionPane.showMessageDialog(null, "Inserte los datos");
+            }
+        }
+        
+        //BOTON PARA BUSCAR CLASE POR ENT
+        
+        else if(e.getSource()==motint.obj.BotonBuscarE|| e.getSource()==motint.obj.TextBusE){
+            if (!motint.obj.TextBusE.getText().equals("Ingresa el ID")){
+                motint.pro.BuscarEntClas(Integer.parseInt(motint.obj.TextBusE.getText()));
+                motint.obj.ventanaBus.dispose();
+            }else{
+                JOptionPane.showMessageDialog(null, "Inserte los datos");
+            }
+        }
         
         // BOTON FILTRAR
         else if(e.getSource()==motint.obj.BotonFiltrar|| e.getSource()==motint.obj.TextPrec){
@@ -331,6 +360,10 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 motint.obj.TextBusA.setText("");
                 motint.obj.TextBusA.setForeground(Color.black);
         }
+        if(e.getSource()==motint.obj.TextBusE && motint.obj.TextBusE.getText().equals("Ingresa el ID")){
+                motint.obj.TextBusE.setText("");
+                motint.obj.TextBusE.setForeground(Color.black);
+        }
         if(e.getSource()==motint.obj.TextPrec && motint.obj.TextPrec.getText().equals("Ingresa el valor máximo")){
                 motint.obj.TextPrec.setText("");
                 motint.obj.TextPrec.setForeground(Color.black);
@@ -373,6 +406,10 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
         if(e.getSource()==motint.obj.TextBusA && motint.obj.TextBusA.getText().equals("")){
                 motint.obj.TextBusA.setText("Ingresa el apellido");
                 motint.obj.TextBusA.setForeground(Color.gray);
+        }
+        if(e.getSource()==motint.obj.TextBusE && motint.obj.TextBusE.getText().equals("")){
+                motint.obj.TextBusE.setText("Ingresa el ID");
+                motint.obj.TextBusE.setForeground(Color.gray);
         }
         if(e.getSource()==motint.obj.TextPrec && motint.obj.TextPrec.getText().equals("")){
                 motint.obj.TextPrec.setText("Ingresa el valor máximo");
@@ -529,6 +566,22 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
             }    
             
         }
+        
+        else if(di==motint.obj.ClaseCadd){
+            motint.pantallaBuscaCadClas();
+            if(motint.obj.drawer.isShow()){
+                motint.obj.drawer.hide();
+            }    
+            
+        }        
+        
+        else if(di==motint.obj.ClaseEnt){
+            motint.pantallaBuscaEntClas();
+            if(motint.obj.drawer.isShow()){
+                motint.obj.drawer.hide();
+            }    
+            
+        }               
         else if(di==motint.obj.calcularDescuentoEstudiante){
              if(motint.obj.TablaVisual.getSelectedRow()>=0){
                 column=motint.obj.TablaVisual.getSelectedColumn();

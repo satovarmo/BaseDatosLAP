@@ -892,9 +892,127 @@ public class MotorInterfaz {
                     obj.drawer.space(5);
                     obj.drawer.addChild(obj.OrganizarStock);
                     obj.drawer.space(5);
+                    break;
+            case "clase":        
+                    obj.drawer.addChild(obj.ClaseCadd);
+                    obj.drawer.space(5);
+                    obj.drawer.addChild(obj.ClaseEnt);
+                    obj.drawer.space(5);
+                    break;
+                            
         }
     }
+
+    public void pantallaBuscaCadClas() {
+        obj.ventanaBus.setSize(600, 600);
+        obj.ventanaBus.getContentPane().setBackground(null);
+        obj.ventanaBus.setResizable(false);
+        obj.ventanaBus.setIconImage(obj.logo.getImage());
+        obj.ventanaBus.setLayout(null);
+        obj.ventanaBus.setVisible(true);
+        obj.ventanaBus.setLocationRelativeTo(null);
+        obj.ventanaBus.setTitle("Busqueda de datos");
+        obj.ventanaBus.add(obj.PanelBus);
+        
+        
+        obj.PanelBus.removeAll();
+        obj.PanelBus.setBounds(0,0,600,600);
+        obj.PanelBus.setLayout(new GridBagLayout());
+        
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
+        constraints.gridx = 0; // La posición x del componente
+        constraints.gridy = 0; // La posición y del componente
+        constraints.weightx = 0; // El espacio extra se distribuye al componente
+        constraints.weighty = 1; // El espacio extra se distribuye al componente
+        constraints.anchor = GridBagConstraints.CENTER;
+        
+        
+        obj.PanelBus.setBackground(new Color(217,235,255));
+        
+        
+        
+        obj.TextBus=new JTextField();
+        obj.TextBus.setBounds(100,200,400,50);
+        obj.TextBus.setText("Ingresa el ID");
+        obj.TextBus.setEditable(true);
+        obj.TextBus.setFont(new Font("arial",0,12));
+        obj.TextBus.setForeground(Color.gray);
+        obj.TextBus.removeFocusListener(evt);
+        obj.TextBus.addFocusListener(evt);
+        obj.TextBus.removeActionListener(evt);
+        obj.TextBus.setVisible(true);
+        obj.PanelBus.add(obj.TextBus,constraints);
+            
+            
+        obj.BotonBuscarCad.setBounds(225,350,150,50);
+        obj.BotonBuscarCad.setFont(new Font("arial",3,20));
+        obj.BotonBuscarCad.setBackground(new Color(27,180,233));
+        obj.BotonBuscarCad.setForeground(new Color(0,0,0));
+        obj.BotonBuscarCad.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        obj.BotonBuscarCad.setFocusPainted(false);
+        obj.BotonBuscarCad.removeActionListener(evt);
+        obj.BotonBuscarCad.addActionListener(evt);
+        constraints.gridy = 1; // La posición y del componente
+            obj.PanelBus.add(obj.BotonBuscarCad,constraints);
+    }
     
+    public void pantallaBuscaEntClas(){
+        obj.ventanaBus.setSize(600, 600);
+        obj.ventanaBus.getContentPane().setBackground(null);
+        obj.ventanaBus.setResizable(false);
+        obj.ventanaBus.setIconImage(obj.logo.getImage());
+        obj.ventanaBus.setLayout(null);
+        obj.ventanaBus.setVisible(true);
+        obj.ventanaBus.setLocationRelativeTo(null);
+        obj.ventanaBus.setTitle("Busqueda de datos");
+        obj.ventanaBus.add(obj.PanelBus);
+        
+        
+        obj.PanelBus.removeAll();
+        obj.PanelBus.setBounds(0,0,600,600);
+        obj.PanelBus.setLayout(new GridBagLayout());
+        
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
+        constraints.gridx = 0; // La posición x del componente
+        constraints.gridy = 0; // La posición y del componente
+        constraints.weightx = 0; // El espacio extra se distribuye al componente
+        constraints.weighty = 1; // El espacio extra se distribuye al componente
+        constraints.anchor = GridBagConstraints.CENTER;
+        
+        
+        obj.PanelBus.setBackground(new Color(217,235,255));
+        
+        
+        
+        obj.TextBusE=new JTextField();
+        obj.TextBusE.setBounds(100,200,400,50);
+        obj.TextBusE.setText("Ingresa el ID");
+        obj.TextBusE.setEditable(true);
+        obj.TextBusE.setFont(new Font("arial",0,12));
+        obj.TextBusE.setForeground(Color.gray);
+        obj.TextBusE.removeFocusListener(evt);
+        obj.TextBusE.addFocusListener(evt);
+        obj.TextBusE.removeActionListener(evt);
+        obj.TextBusE.addActionListener(evt);
+        obj.TextBusE.setVisible(true);
+        obj.PanelBus.add(obj.TextBusE,constraints);
+            
+            
+        obj.BotonBuscarE.setBounds(225,350,150,50);
+        obj.BotonBuscarE.setFont(new Font("arial",3,20));
+        obj.BotonBuscarE.setBackground(new Color(27,180,233));
+        obj.BotonBuscarE.setForeground(new Color(0,0,0));
+        obj.BotonBuscarE.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        obj.BotonBuscarE.setFocusPainted(false);
+        obj.BotonBuscarE.removeActionListener(evt);
+        obj.BotonBuscarE.addActionListener(evt);
+        constraints.gridy = 1; // La posición y del componente
+            obj.PanelBus.add(obj.BotonBuscarE,constraints);
+        
+    
+    }
     
 }
 

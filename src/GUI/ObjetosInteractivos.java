@@ -118,6 +118,9 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     public DrawerItem BuscarN=(new DrawerItem("Buscar por nombre y apellido").icon(AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build());
     public DrawerItem Filtrar=(new DrawerItem("Filtrar por precio").icon(AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build());
     public DrawerItem OrganizarStock=(new DrawerItem("Organizar por stock").icon(AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build());
+    public DrawerItem ClaseCadd=(new DrawerItem("Buscar por Caddie").icon(AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build());
+    public DrawerItem ClaseEnt=(new DrawerItem("Buscar por Entrenador").icon(AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build());
+    
     
     //PANTALLA PARA CAMBIO DE CONTRASEÑA
     public JFrame ventanaCont=new JFrame();
@@ -154,6 +157,8 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     public JPanel PanelBus=new JPanel();
     public JTextField TextBus;
     public JButton BotonBuscarFila=new JButton("Buscar");
+    public JButton BotonBuscarCad=new JButton("Buscar");
+    
     
     //PANTALLA PARA buscar POR NOMBRE
     public JFrame ventanaBusN=new JFrame();
@@ -168,6 +173,11 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     public JTextField TextPrec;
     public JButton BotonFiltrar=new JButton("Filtrar");
     public JButton BotonDesFiltrar=new JButton("Restaurar");
+    
+    
+    public JTextField TextBusE;
+    public JButton BotonBuscarE=new JButton("Buscar");
+    
     
     public JButton btnPanel=new JButton("|||");
     public Drawer drawer;

@@ -217,6 +217,68 @@ public class Procedimientos {
         
     }
     
+    public void BuscarCad(int cedula){
+        String datos="";
+        try{
+            Connection con = conectar.conect(motint.obj.usuario,motint.obj.contra);
+            String sql = "call BUSCAR_CAD("+cedula+")";
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            if(rs.next()){
+                datos=rs.getString("PERSONACLUB_ID")+rs.getString("salario");
+            }
+            rs.close();
+            ps.close();
+            con.close();
+            Resaltar(datos);
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error de conexión: " + ex.getMessage());
+        }
+        
+    }
+    
+    
+    public void BuscarAcuEst(int cedula){
+        String datos="";
+        try{
+            Connection con = conectar.conect(motint.obj.usuario,motint.obj.contra);
+            String sql = "call BUSCAR_ACUDIENTE_ESTUDIANTE("+cedula+")";
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            if(rs.next()){
+                datos=rs.getString("ID_Estudiante")+rs.getString("Nombre_Estudiante")+rs.getString("Apellido_Estudiante")+rs.getString("Nombre_Acudiente")+rs.getString("Apellido_Acudiente")+rs.getString("Tel");
+            }
+            rs.close();
+            ps.close();
+            con.close();
+            Resaltar(datos);
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error de conexión: " + ex.getMessage());
+        }
+        
+    }
+    
+    
+    public void BuscarClaseID(int cedula){
+         String datos="";
+        try{
+            Connection con = conectar.conect(motint.obj.usuario,motint.obj.contra);
+            String sql = "call BUSCAR_CLASEID("+cedula+")";
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            if(rs.next()){
+                datos=rs.getString("CLAID")+rs.getString("Jornada")+rs.getString("Costo")+rs.getString("ENTRENADOR_PERSONACLUB_ID")+rs.getString("CADDIE_PERSONACLUB_ID")+rs.getString("Fecha")+rs.getString("CANCHA_CanID");
+            }
+            rs.close();
+            ps.close();
+            con.close();
+            Resaltar(datos);
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error de conexión: " + ex.getMessage());
+        }
+     }
+    
+    
     public void calcularCosto(){
         if(motint.obj.TablaVisual.getSelectedRow()>=0){
                 Object[] col=new Object[motint.obj.TablaVisual.getColumnCount()];
@@ -369,5 +431,67 @@ public class Procedimientos {
                     System.exit(0);
                 }
         motint.obj.TablaVisual.setModel(motint.obj.tabla);
+    }
+
+    public void BuscarCadClas(int cedula) {
+         String[] datos=new String[100];
+        try{
+            Connection con = conectar.conect(motint.obj.usuario,motint.obj.contra);
+            String sql = "call CLASE_TRABAJA_CAD("+cedula+")";
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            int contador=0;
+            while(rs.next()){
+                datos[contador]=rs.getString("CLAID")+rs.getString("Jornada")+rs.getString("Costo")+rs.getString("ENTRENADOR_PERSONACLUB_ID")+rs.getString("CADDIE_PERSONACLUB_ID")+rs.getString("Fecha")+rs.getString("CANCHA_CanID");
+                contador+=1;
+            }
+            rs.close();
+            ps.close();
+            con.close();
+            motint.obj.TablaVisual.clearSelection();
+            if (motint.obj.mapa.containsKey(datos[0])){
+                for(int i=0;i<contador;i++){
+             // Si la encuentra, resáltala
+                     int indiceFila = motint.obj.mapa.get(datos[i]);
+                     motint.obj.TablaVisual.addRowSelectionInterval(indiceFila-1, indiceFila-1);
+                     motint.obj.TablaVisual.addColumnSelectionInterval(0, motint.obj.TablaVisual.getColumnCount()-1);
+                 }
+            }else{
+                     JOptionPane.showMessageDialog(null, "No se encontró el nombre en esta tabla");
+                 }    
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error de conexión: " + ex.getMessage());
+        }
+    }
+    
+    public void BuscarEntClas(int cedula) {
+         String[] datos=new String[100];
+        try{
+            Connection con = conectar.conect(motint.obj.usuario,motint.obj.contra);
+            String sql = "call BUSCAR_CLASES_ENTREN("+cedula+")";
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            int contador=0;
+            while(rs.next()){
+                datos[contador]=rs.getString("CLAID")+rs.getString("Jornada")+rs.getString("Costo")+rs.getString("ENTRENADOR_PERSONACLUB_ID")+rs.getString("CADDIE_PERSONACLUB_ID")+rs.getString("Fecha")+rs.getString("CANCHA_CanID");
+                contador+=1;
+            }
+            rs.close();
+            ps.close();
+            con.close();
+            motint.obj.TablaVisual.clearSelection();
+            if (motint.obj.mapa.containsKey(datos[0])){
+                for(int i=0;i<contador;i++){
+             // Si la encuentra, resáltala
+                     int indiceFila = motint.obj.mapa.get(datos[i]);
+                     motint.obj.TablaVisual.addRowSelectionInterval(indiceFila-1, indiceFila-1);
+                     motint.obj.TablaVisual.addColumnSelectionInterval(0, motint.obj.TablaVisual.getColumnCount()-1);
+                 }
+            }else{
+                     JOptionPane.showMessageDialog(null, "No se encontró el nombre en esta tabla");
+                 }    
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error de conexión: " + ex.getMessage());
+        }
     }
 }
