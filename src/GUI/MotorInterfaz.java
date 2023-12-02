@@ -20,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javaswingdev.drawer.Drawer;
 import javaswingdev.drawer.DrawerItem;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -389,7 +390,6 @@ public class MotorInterfaz {
             String sql = "DESCRIBE "+t;
             PreparedStatement ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            ArrayList<String> permisos = new ArrayList<> ();
             while (rs.next()) {
                 obj.NombreColumnas.add(rs.getString ("field"));
                 obj.TipoColumnas.add(rs.getString ("type"));
@@ -623,6 +623,149 @@ public class MotorInterfaz {
     }
    
     
+    
+    //CREAMOS LA PANTALLA PARA BUSCAR POR NOMBRE
+    
+    public void pantallaBuscaNombre() {
+        obj.ventanaBusN.setSize(600, 600);
+        obj.ventanaBusN.getContentPane().setBackground(null);
+        obj.ventanaBusN.setResizable(false);
+        obj.ventanaBusN.setIconImage(obj.logo.getImage());
+        obj.ventanaBusN.setLayout(null);
+        obj.ventanaBusN.setVisible(true);
+        obj.ventanaBusN.setLocationRelativeTo(null);
+        obj.ventanaBusN.setTitle("Busqueda de datos");
+        obj.ventanaBusN.add(obj.PanelBusN);
+        
+        
+        obj.PanelBusN.removeAll();
+        obj.PanelBusN.setBounds(0,0,600,600);
+        obj.PanelBusN.setLayout(new GridBagLayout());
+        
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
+        constraints.gridx = 0; // La posición x del componente
+        constraints.gridy = 0; // La posición y del componente
+        constraints.weightx = 0; // El espacio extra se distribuye al componente
+        constraints.weighty = 1; // El espacio extra se distribuye al componente
+        constraints.anchor = GridBagConstraints.CENTER;
+        
+        
+        obj.PanelBusN.setBackground(new Color(217,235,255));
+        
+        
+        
+        obj.TextBusN=new JTextField();
+        obj.TextBusN.setBounds(100,200,400,50);
+        obj.TextBusN.setText("Ingresa el nombre");
+        obj.TextBusN.setEditable(true);
+        obj.TextBusN.setFont(new Font("arial",0,12));
+        obj.TextBusN.setForeground(Color.gray);
+        obj.TextBusN.removeFocusListener(evt);
+        obj.TextBusN.addFocusListener(evt);
+        obj.TextBusN.removeActionListener(evt);
+        obj.TextBusN.addActionListener(evt);
+        obj.TextBusN.setVisible(true);
+        obj.PanelBusN.add(obj.TextBusN,constraints);
+        
+        
+        obj.TextBusA=new JTextField();
+        obj.TextBusA.setBounds(100,200,400,50);
+        obj.TextBusA.setText("Ingresa el apellido");
+        obj.TextBusA.setEditable(true);
+        obj.TextBusA.setFont(new Font("arial",0,12));
+        obj.TextBusA.setForeground(Color.gray);
+        obj.TextBusA.removeFocusListener(evt);
+        obj.TextBusA.addFocusListener(evt);
+        obj.TextBusA.removeActionListener(evt);
+        obj.TextBusA.addActionListener(evt);
+        obj.TextBusA.setVisible(true);
+        constraints.gridy = 1; // La posición y del componente
+        obj.PanelBusN.add(obj.TextBusA,constraints);
+            
+            
+        obj.BotonBuscarFilaN.setBounds(225,350,150,50);
+        obj.BotonBuscarFilaN.setFont(new Font("arial",3,20));
+        obj.BotonBuscarFilaN.setBackground(new Color(27,180,233));
+        obj.BotonBuscarFilaN.setForeground(new Color(0,0,0));
+        obj.BotonBuscarFilaN.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        obj.BotonBuscarFilaN.setFocusPainted(false);
+        obj.BotonBuscarFilaN.removeActionListener(evt);
+        obj.BotonBuscarFilaN.addActionListener(evt);
+        constraints.gridy = 2; // La posición y del componente
+            obj.PanelBusN.add(obj.BotonBuscarFilaN,constraints);
+    }
+    
+    
+    //CREAMOS LA PANTALLA PARA FILTRAR EL PRECIO
+     public void pantallaPrec() {
+        obj.ventanaPrec.setSize(600, 600);
+        obj.ventanaPrec.getContentPane().setBackground(null);
+        obj.ventanaPrec.setResizable(false);
+        obj.ventanaPrec.setIconImage(obj.logo.getImage());
+        obj.ventanaPrec.setLayout(null);
+        obj.ventanaPrec.setVisible(true);
+        obj.ventanaPrec.setLocationRelativeTo(null);
+        obj.ventanaPrec.setTitle("Filtro de precios");
+        obj.ventanaPrec.add(obj.PanelPrec);
+        
+        
+        obj.PanelPrec.removeAll();
+        obj.PanelPrec.setBounds(0,0,600,600);
+        obj.PanelPrec.setLayout(new GridBagLayout());
+        
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL; // El componente se expande en la dirección horizontal
+        constraints.gridx = 0; // La posición x del componente
+        constraints.gridy = 0; // La posición y del componente
+        constraints.weightx = 0; // El espacio extra se distribuye al componente
+        constraints.weighty = 1; // El espacio extra se distribuye al componente
+        constraints.anchor = GridBagConstraints.CENTER;
+        
+        
+        obj.PanelPrec.setBackground(new Color(217,235,255));
+        
+        
+        
+        obj.TextPrec=new JTextField();
+        obj.TextPrec.setBounds(100,200,400,50);
+        obj.TextPrec.setText("Ingresa el valor máximo");
+        obj.TextPrec.setEditable(true);
+        obj.TextPrec.setFont(new Font("arial",0,12));
+        obj.TextPrec.setForeground(Color.gray);
+        obj.TextPrec.removeFocusListener(evt);
+        obj.TextPrec.addFocusListener(evt);
+        obj.TextPrec.removeActionListener(evt);
+        obj.TextPrec.addActionListener(evt);
+        obj.TextPrec.setVisible(true);
+        obj.PanelPrec.add(obj.TextPrec,constraints);
+            
+            
+        obj.BotonFiltrar.setBounds(225,350,150,50);
+        obj.BotonFiltrar.setFont(new Font("arial",3,20));
+        obj.BotonFiltrar.setBackground(new Color(27,180,233));
+        obj.BotonFiltrar.setForeground(new Color(0,0,0));
+        obj.BotonFiltrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        obj.BotonFiltrar.setFocusPainted(false);
+        obj.BotonFiltrar.removeActionListener(evt);
+        obj.BotonFiltrar.addActionListener(evt);
+        constraints.gridy = 1; // La posición y del componente
+            obj.PanelPrec.add(obj.BotonFiltrar,constraints);
+            
+            
+        obj.BotonDesFiltrar.setBounds(225,350,150,50);
+        obj.BotonDesFiltrar.setFont(new Font("arial",3,20));
+        obj.BotonDesFiltrar.setBackground(new Color(27,180,233));
+        obj.BotonDesFiltrar.setForeground(new Color(0,0,0));
+        obj.BotonDesFiltrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        obj.BotonDesFiltrar.setFocusPainted(false);
+        obj.BotonDesFiltrar.removeActionListener(evt);
+        obj.BotonDesFiltrar.addActionListener(evt);
+        constraints.gridy = 2; // La posición y del componente
+            obj.PanelPrec.add(obj.BotonDesFiltrar,constraints);     
+    }
+    
+
     //CREAMOS LA PANTALLA PARA CAMBIAR CONTRASEÑA
      void ventanaCont() {
         
@@ -721,13 +864,37 @@ public class MotorInterfaz {
     }
 
     public void AgregarDrawer(){
+        obj.drawer=Drawer.newDrawer(obj.ventana);
+        obj.drawer.event(evt);
+        obj.drawer.header(obj.Encabezado);
+        obj.drawer.space(15);
+        obj.drawer.addChild(obj.eliminar);
+        obj.drawer.space(5);
+        obj.drawer.addChild(obj.actualizar);
+        obj.drawer.space(5);
+        obj.drawer.addChild(obj.insertar);
+        obj.drawer.space(5);
+        obj.drawer.addChild(obj.buscar);
+        obj.drawer.space(5);
+        obj.drawer.addFooter(obj.CerrarSesión);
         String u=obj.BoxTabla.getSelectedItem().toString();
         switch(u){
             case "estudiante_costo":
                     obj.drawer.addChild(obj.calcularDescuentoEstudiante);
+                    obj.drawer.space(5);
+                    break;
+            case "clases_entrenadores":
+                    obj.drawer.addChild(obj.BuscarN);
+                    obj.drawer.space(5);
+                    break;
+            case "articulos":
+                    obj.drawer.addChild(obj.Filtrar);
+                    obj.drawer.space(5);
+                    obj.drawer.addChild(obj.OrganizarStock);
                     obj.drawer.space(5);
         }
     }
     
     
 }
+

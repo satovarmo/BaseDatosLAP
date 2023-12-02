@@ -246,10 +246,26 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                         motint.pro.BuscarPersona(Integer.parseInt(motint.obj.TextBus.getText()));
                         break;
                     case "estudiante_costo":
-                        motint.pro.BuscarEstudiante(Integer.parseInt(motint.obj.TextBus.getText()));
+                        if(motint.obj.usuario.equals("acudiente")){
+                            motint.pro.BuscarEstAcu(Integer.parseInt(motint.obj.TextBus.getText()));
+                        }else{
+                            motint.pro.BuscarEstudiante(Integer.parseInt(motint.obj.TextBus.getText()));
+                        }    
                         break;
                     case "entrenadores":
                         motint.pro.BuscarEntrenador(Integer.parseInt(motint.obj.TextBus.getText()));
+                        break;
+                    case "clases_entrenadores":
+                        motint.pro.BuscarClaseEntr(Integer.parseInt(motint.obj.TextBus.getText()));
+                        break;
+                    case "articulos":
+                        motint.pro.BuscarArticulo(Integer.parseInt(motint.obj.TextBus.getText()));
+                        break;
+                    case "acudiente":
+                        motint.pro.BuscarAcu(Integer.parseInt(motint.obj.TextBus.getText()));
+                        break;
+                    case "acudiente_costo":
+                        motint.pro.BuscarAcuCos(Integer.parseInt(motint.obj.TextBus.getText()));
                         break;
                 }
                 motint.obj.ventanaBus.dispose();
@@ -257,6 +273,35 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 JOptionPane.showMessageDialog(null, "Inserte los datos");
             }
         }
+        
+        
+        // BTON BUSQUEDA NOMBRE
+        else if(e.getSource()==motint.obj.BotonBuscarFilaN|| e.getSource()==motint.obj.TextBusA){
+            if (!motint.obj.TextBusN.getText().equals("Ingresa el nombre") && !motint.obj.TextBusA.getText().equals("Ingresa el apellido") ){
+                motint.pro.BuscarNombre(motint.obj.TextBusN.getText(),motint.obj.TextBusA.getText());
+                motint.obj.ventanaBusN.dispose();
+            }else{
+                JOptionPane.showMessageDialog(null, "Inserte los datos");
+            }
+        }
+        
+        
+        // BOTON FILTRAR
+        else if(e.getSource()==motint.obj.BotonFiltrar|| e.getSource()==motint.obj.TextPrec){
+            if (!motint.obj.TextPrec.getText().equals("Ingresa el valor máximo")){
+                motint.pro.TablaFiltrar(motint.obj.TextPrec.getText());
+                motint.obj.ventanaPrec.dispose();
+            }else{
+                JOptionPane.showMessageDialog(null, "Inserte los datos");
+            }
+        }
+        // BOTON DESFILTRAR
+        else if(e.getSource()==motint.obj.BotonDesFiltrar){
+                motint.ReiniciarTabla(motint.obj.BoxTabla.getSelectedItem().toString());
+                motint.obj.ventanaPrec.dispose();
+        }
+        
+        
     }
     @Override
     public void focusGained(FocusEvent e) {
@@ -277,6 +322,18 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
         if(e.getSource()==motint.obj.TextBus && motint.obj.TextBus.getText().equals("Ingresa el ID")){
                 motint.obj.TextBus.setText("");
                 motint.obj.TextBus.setForeground(Color.black);
+        }
+        if(e.getSource()==motint.obj.TextBusN && motint.obj.TextBusN.getText().equals("Ingresa el nombre")){
+                motint.obj.TextBusN.setText("");
+                motint.obj.TextBusN.setForeground(Color.black);
+        }
+        if(e.getSource()==motint.obj.TextBusA && motint.obj.TextBusA.getText().equals("Ingresa el apellido")){
+                motint.obj.TextBusA.setText("");
+                motint.obj.TextBusA.setForeground(Color.black);
+        }
+        if(e.getSource()==motint.obj.TextPrec && motint.obj.TextPrec.getText().equals("Ingresa el valor máximo")){
+                motint.obj.TextPrec.setText("");
+                motint.obj.TextPrec.setForeground(Color.black);
         }
         if(motint.obj.listText!=null){
                 for(int i=0;i<motint.obj.tabla.getColumnCount();i++){
@@ -306,8 +363,20 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
                 motint.obj.TextCont.setForeground(Color.gray);
         }
         if(e.getSource()==motint.obj.TextBus && motint.obj.TextBus.getText().equals("")){
-                motint.obj.TextAct.setText("Ingresa el dato");
-                motint.obj.TextAct.setForeground(Color.gray);
+                motint.obj.TextBus.setText("Ingresa el ID");
+                motint.obj.TextBus.setForeground(Color.gray);
+        }
+        if(e.getSource()==motint.obj.TextBusN && motint.obj.TextBusN.getText().equals("")){
+                motint.obj.TextBusN.setText("Ingresa el nombre");
+                motint.obj.TextBusN.setForeground(Color.gray);
+        }
+        if(e.getSource()==motint.obj.TextBusA && motint.obj.TextBusA.getText().equals("")){
+                motint.obj.TextBusA.setText("Ingresa el apellido");
+                motint.obj.TextBusA.setForeground(Color.gray);
+        }
+        if(e.getSource()==motint.obj.TextPrec && motint.obj.TextPrec.getText().equals("")){
+                motint.obj.TextPrec.setText("Ingresa el valor máximo");
+                motint.obj.TextPrec.setForeground(Color.gray);
         }
        if(motint.obj.listText!=null){
             for(int i=0;i<motint.obj.tabla.getColumnCount();i++){
@@ -434,6 +503,27 @@ public class Eventos extends MouseAdapter implements EventDrawer,ActionListener,
         }
         else if(di==motint.obj.buscar){
             motint.pantallaBusca();
+            if(motint.obj.drawer.isShow()){
+                motint.obj.drawer.hide();
+            }    
+            
+        }
+        else if(di==motint.obj.BuscarN){
+            motint.pantallaBuscaNombre();
+            if(motint.obj.drawer.isShow()){
+                motint.obj.drawer.hide();
+            }    
+            
+        }
+        else if(di==motint.obj.Filtrar){
+            motint.pantallaPrec();
+            if(motint.obj.drawer.isShow()){
+                motint.obj.drawer.hide();
+            }    
+            
+        }
+        else if(di==motint.obj.OrganizarStock){
+            motint.pro.OrganizarS();
             if(motint.obj.drawer.isShow()){
                 motint.obj.drawer.hide();
             }    

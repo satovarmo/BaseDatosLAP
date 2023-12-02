@@ -28,24 +28,10 @@ public class ObjetosInteractivos {
       public ObjetosInteractivos(MotorInterfaz motint){
           
           this.motint=motint;
-            ConstructorMenu();
             ConstructorDescripciones();
     }
     // GUARDAMOS LA INFORMACION DEL USUARIO
-public void ConstructorMenu(){
-        drawer.header(Encabezado);
-        drawer.space(15);
-        drawer.addChild(eliminar);
-        drawer.space(5);
-        drawer.addChild(actualizar);
-        drawer.space(5);
-        drawer.addChild(insertar);
-        drawer.space(5);
-        drawer.addChild(buscar);
-        drawer.space(5);
-        drawer.addFooter(CerrarSesión);
-        drawer.event(motint.evt);    
-}
+
 
 public void ConstructorDescripciones(){
     descripciones.put("cancha","Se muestra la información de cada una de las canchas disponibles para el club.");
@@ -129,7 +115,9 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     public DrawerItem buscar=(new DrawerItem("Buscar fila").icon(AjustarImg("/Imagenes/insertar.png", 30, 30))).build();
     public DrawerItem CerrarSesión=(new DrawerItem("CERRAR SESIÓN").icon(AjustarImg("/Imagenes/insertar.png", 30, 30))).build();
     public DrawerItem calcularDescuentoEstudiante=(new DrawerItem("Calcular descuento").icon(AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build());
-    
+    public DrawerItem BuscarN=(new DrawerItem("Buscar por nombre y apellido").icon(AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build());
+    public DrawerItem Filtrar=(new DrawerItem("Filtrar por precio").icon(AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build());
+    public DrawerItem OrganizarStock=(new DrawerItem("Organizar por stock").icon(AjustarImg("/Imagenes/Eliminar.png", 30, 30)).build());
     
     //PANTALLA PARA CAMBIO DE CONTRASEÑA
     public JFrame ventanaCont=new JFrame();
@@ -167,10 +155,22 @@ public ImageIcon AjustarImg(String Rutimg, int w, int h){
     public JTextField TextBus;
     public JButton BotonBuscarFila=new JButton("Buscar");
     
+    //PANTALLA PARA buscar POR NOMBRE
+    public JFrame ventanaBusN=new JFrame();
+    public JPanel PanelBusN=new JPanel();
+    public JTextField TextBusN;
+    public JTextField TextBusA;
+    public JButton BotonBuscarFilaN=new JButton("Buscar");
     
+    //PANTALLA PARA filtrar precios
+    public JFrame ventanaPrec=new JFrame();
+    public JPanel PanelPrec=new JPanel();
+    public JTextField TextPrec;
+    public JButton BotonFiltrar=new JButton("Filtrar");
+    public JButton BotonDesFiltrar=new JButton("Restaurar");
     
     public JButton btnPanel=new JButton("|||");
-    public Drawer drawer=Drawer.newDrawer(ventana);
+    public Drawer drawer;
     
     public Hashtable descripciones=new Hashtable();
 }
